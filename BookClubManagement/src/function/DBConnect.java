@@ -23,8 +23,4 @@ public class DBConnect {
 		
 		return con;
 	}
-	
-	public static void main(String[] args) {
-		Connection conn = makeConnection();
-	}
 }
