@@ -9,7 +9,7 @@ public class Member {
 	private int num;
 	private String id;
 	private String name;
-	private int level;
+	public int level;
 	
 	public Member(ResultSet rs) {
 		try { //"select m_num, id, pw, level, m_name from Member where id = ?";
