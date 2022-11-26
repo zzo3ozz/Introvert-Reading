@@ -23,6 +23,10 @@ public class Member {
 		}
 	}
 	
+	public void printInfo() {
+		System.out.print(this.num + " " + this.id + " " + this.name + " " + this.level);
+	}
+	
 	public void changePass(String nowPW, String newPW) {
 		Connection con = DBConnect.makeConnection();
 		PreparedStatement pstmt = null;
