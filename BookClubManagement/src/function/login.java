@@ -1,15 +1,15 @@
 package function;
 
-import struct.Member;
+import struct.member;
 import java.sql.*;
 
-public class LoginFunc {
+public class login {
 	public final static int SUCCESS = 1;
 	public final static int IDERROR = 0;
 	public final static int PWERROR = -1;
 	public final static int ERROR = -2;
 	
-	public static int login(String id, String pw) {
+	public static int tryLogin(String id, String pw) {
 		Connection con = DBConnect.makeConnection(); 
 		PreparedStatement pstmt = null;
 		
@@ -24,14 +24,14 @@ public class LoginFunc {
 
 				if(dbPW.equals(pw)) {
 					// ID 존재, PW 일치할 경우
-					Member mem = new Member(rs);
+					member mem = new member(rs);
 					
 					rs.close();
 					pstmt.close();
 					con.close();
 					
-					Session.login_member = mem;
-					Session.login_member.printInfo();
+					session.login_member = mem;
+					session.login_member.printInfo();
 					 
 					return SUCCESS;
 				}
