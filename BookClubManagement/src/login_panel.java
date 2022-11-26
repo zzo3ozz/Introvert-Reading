@@ -4,16 +4,15 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import function.LoginFunc;
-import function.Session;
-import struct.Member;
+import function.*;
+import struct.member;
 
-public class LoginWin extends JPanel{
+public class login_panel extends JPanel{
 	private JTextField idField;
 	private JPasswordField pwField;
 	private JLabel error;
 	
-	public LoginWin() {
+	public login_panel() {
 		setBackground(Color.ORANGE);
 		setBounds(700, 0, 300, 700);
 		setLayout(null);
@@ -37,13 +36,13 @@ public class LoginWin extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				String id = idField.getText();
 				String pw = String.valueOf(pwField.getPassword());
-				int state = LoginFunc.login(id, pw);
+				int state = login.tryLogin(id, pw);
 				
-				if(state == LoginFunc.SUCCESS) {
+				if(state == login.SUCCESS) {
 					setVisible(false);
-				} else if(state == LoginFunc.IDERROR) {
+				} else if(state == login.IDERROR) {
 					error.setText("등록된 아이디가 없습니다.");
-				} else if(state == LoginFunc.PWERROR) {
+				} else if(state == login.PWERROR) {
 					error.setText("비밀번호가 일치하지 않습니다.");
 				}
 			}

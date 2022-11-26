@@ -1,17 +1,15 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
+import java.awt.event.*;
 import javax.swing.*;
 
-import function.Session;
+import function.session;
 
-public class MenuWin extends JPanel {
+public class menu extends JPanel {
 	private int MENU_NUM = 3; 
 	public int selected;
 	
-	public MenuWin() {
-		if(Session.login_member.level ==  0) {
+	public menu() {
+		if(session.login_member.level ==  0) {
 			MENU_NUM = 4;
 		}
 		
@@ -19,6 +17,7 @@ public class MenuWin extends JPanel {
 		setBounds(700, 0, 300, 700);
 		setLayout(new FlowLayout());
 		
+		System.out.println(MENU_NUM);
 		JButton[] btn_list = new JButton[MENU_NUM];
 		
 		btn_list[0] = new JButton("로테이션 일정");
@@ -26,7 +25,7 @@ public class MenuWin extends JPanel {
 		btn_list[2] = new JButton("마이페이지");
 		
 		if(MENU_NUM == 4) {
-			btn_list[4] = new JButton("관리자 메뉴");
+			btn_list[3] = new JButton("관리자 메뉴");
 		}
 		
 		for(int i = 0; i < MENU_NUM; i++) {
@@ -40,9 +39,10 @@ public class MenuWin extends JPanel {
 							selected = j;
 						}
 					}
+					setVisible(false);
 				}
-
 			});
+			add(btn_list[i]);
 		}
 	}
 }
