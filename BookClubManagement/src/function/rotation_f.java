@@ -8,7 +8,7 @@ import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
-public class rotation {
+public class rotation_f {
 	// 오버로딩1 : 날짜 지정 없이 자동 생성
 	public static boolean setRotation() {
 		Connection con = DBConnect.makeConnection();
