@@ -4,11 +4,14 @@ import struct.*;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 public class rotation_f {
-	public final static int DATE_FALSE = -1;
+	public final static int BEFORE_START = -3;
+	public final static int DURATION_ERROR = -2;
+	public final static int BEFORE_END = -1;
 	public final static int DB_FALSE = 0;
 	public final static int SUCCESS = 1;
 	
@@ -123,6 +126,12 @@ public class rotation_f {
 	
 	// 오버로딩1 : 날짜 지정 생성 
 	public static int setRotation(LocalDate start, LocalDate end) {
+		if(end.isBefore(start)) 
+			return BEFORE_START;
+		if(ChronoUnit.DAYS.between(start, end) < 3)
+			return DURATION_ERROR;
+		
+		
 		Connection con = DBConnect.makeConnection();
 		PreparedStatement pstmt = null;
 		PreparedStatement pstmt1 = null;
@@ -144,7 +153,7 @@ public class rotation_f {
 			
 			// 마지막 회차 로테이션 종료일보다 새로 설정한 시작일이 앞서면 false
 			if(start.isBefore(r_date))
-				return DATE_FALSE;
+				return BEFORE_END;
 			
 			
 			// 총 멤버 수 불러오기

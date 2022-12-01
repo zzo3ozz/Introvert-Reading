@@ -73,27 +73,34 @@ public class admin extends JPanel {
 					java.util.Date temp_end = (java.util.Date) datePicker2.getModel().getValue();
 					
 					int result = 0;
+					
 					if(temp_start == null && temp_end == null) 
 						result = rotation_f.setRotation();
 					else if (temp_start == null)
-						la3.setText("종료일을 입력하세요.");
-					else if (temp_end == null) 
 						la3.setText("시작일을 입력하세요.");
+					else if (temp_end == null)  
+						la3.setText("종료일을 입력하세요.");
 					else  {
 						LocalDate start = new java.sql.Date(temp_start.getTime()).toLocalDate();
 						LocalDate end = new java.sql.Date(temp_end.getTime()).toLocalDate();
+						
 						result = rotation_f.setRotation(start, end);
+						String message = "";
+						
+						if(result == rotation_f.SUCCESS)
+							message = "등록 성공";
+						else if (result == rotation_f.BEFORE_START)
+							message = "종료일은 시작일을 앞설 수 없습니다.";
+						else if (result == rotation_f.BEFORE_END)
+							message = "새로운 로테이션 시작일은 마지막 로테이션의 종료일보다 앞설 수 없습니다.";
+						else if (result == rotation_f.DURATION_ERROR)
+							message = "시작일과 종료일은 최소 4일 이상 차이가 나야 합니다.";
+						else
+							message = "저장 실패";
+						
+						JOptionPane.showMessageDialog(Main.c, message);
+						la3.setText("시작일, 종료일 모두를 지정하지 않는 경우 자동 설정 됩니다.");
 					}
-
-					String message;
-					if(result == rotation_f.SUCCESS)
-						message = "등록 성공";
-					else if (result == rotation_f.DB_FALSE)
-						message = "저장 실패";
-					else
-						message = "새로운 로테이션 시작일은 마지막 로테이션의 종료일보다 앞설 수 없습니다.";
-					
-					JOptionPane.showMessageDialog(Main.c, message);
 				}
 			});
 			
