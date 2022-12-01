@@ -9,7 +9,7 @@ public class menu extends JPanel {
 	public int selected;
 	
 	public menu() {
-		if(session.login_member.level ==  0) {
+		if(session.login_member.getLevel() ==  0) {
 			MENU_NUM = 4;
 		}
 		
@@ -17,7 +17,6 @@ public class menu extends JPanel {
 		setBounds(700, 0, 300, 700);
 		setLayout(new FlowLayout());
 		
-		System.out.println(MENU_NUM);
 		JButton[] btn_list = new JButton[MENU_NUM];
 		
 		btn_list[0] = new JButton("로테이션 일정");

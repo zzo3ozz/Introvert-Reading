@@ -9,7 +9,12 @@ public class member {
 	private int num;
 	private String id;
 	private String name;
-	public int level;
+	private int level;
+		
+	public member(int num, String name) {
+		this.num = num;
+		this.name = name;
+	}
 	
 	public member(ResultSet rs) {
 		try { //"select m_num, id, pw, level, m_name from Member where id = ?";
@@ -21,6 +26,14 @@ public class member {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public int getLevel() {
+		return this.level;
+	}
+	
+	public String getName() {
+		return this.name;
 	}
 	
 	public void printInfo() {

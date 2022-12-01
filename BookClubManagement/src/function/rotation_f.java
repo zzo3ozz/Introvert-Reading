@@ -1,16 +1,19 @@
 package function;
 
-import struct.member;
+import struct.*;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 public class rotation_f {
+	public final static int DATE_FALSE = -1;
+	public final static int DB_FALSE = 0;
+	public final static int SUCCESS = 1;
+	
 	// 오버로딩1 : 날짜 지정 없이 자동 생성
-	public static boolean setRotation() {
+	public static int setRotation() {
 		Connection con = DBConnect.makeConnection();
 		PreparedStatement pstmt = null;
 		PreparedStatement pstmt1 = null;
@@ -108,18 +111,18 @@ public class rotation_f {
 		} catch(SQLException e) {
 			System.out.print("error!");
 			e.printStackTrace();
-			return false;
+			return DB_FALSE;
 		}
 
 		if(pstmt != null) try{ pstmt.close();} catch(SQLException e){};
 		if(pstmt1 != null) try{ pstmt1.close();} catch(SQLException e){}; 
 		if(pstmt2 != null) try{ pstmt2.close();} catch(SQLException e){}; 
         if(con != null) try{ con.close();} catch(SQLException e){};
-		return true;
+		return SUCCESS;
 	}
 	
 	// 오버로딩1 : 날짜 지정 생성 
-	public static boolean setRotation(LocalDate start, LocalDate end) {
+	public static int setRotation(LocalDate start, LocalDate end) {
 		Connection con = DBConnect.makeConnection();
 		PreparedStatement pstmt = null;
 		PreparedStatement pstmt1 = null;
@@ -141,7 +144,7 @@ public class rotation_f {
 			
 			// 마지막 회차 로테이션 종료일보다 새로 설정한 시작일이 앞서면 false
 			if(start.isBefore(r_date))
-				return false;
+				return DATE_FALSE;
 			
 			
 			// 총 멤버 수 불러오기
@@ -222,14 +225,69 @@ public class rotation_f {
 		} catch(SQLException e) {
 			System.out.print("error!");
 			e.printStackTrace();
-			return false;
+			return DB_FALSE;
 		}
 
 		if(pstmt != null) try{ pstmt.close();} catch(SQLException e){};
 		if(pstmt1 != null) try{ pstmt1.close();} catch(SQLException e){}; 
 		if(pstmt2 != null) try{ pstmt2.close();} catch(SQLException e){}; 
         if(con != null) try{ con.close();} catch(SQLException e){};
-		return true;
+		return SUCCESS;
+	}
+	
+	// 모든 로테이션 정보 가져오기
+	public static ArrayList<rotation> getAllRotation() {
+		Connection con = DBConnect.makeConnection();
+		PreparedStatement pstmt = null;
+		ArrayList<rotation> result = new ArrayList<rotation>();
+		
+		try {
+			String sql = "select r_num, t_id, m_num, m_name, r_start, r_end from rotation_view";
+			pstmt = con.prepareStatement(sql);
+			ResultSet rs = pstmt.executeQuery();
+			boolean haveRecord = rs.next();
+			
+			while(true) {
+				int r_num = rs.getInt(1);
+				int r_index = r_num;
+				
+				LocalDate r_start = rs.getDate(5).toLocalDate();
+				LocalDate r_end = rs.getDate(6).toLocalDate();
+				ArrayList<team> teams = new ArrayList<team>();
+				
+				while(r_num == r_index) {
+					int t_id = rs.getInt(2);
+					int t_index = t_id;
+					
+					ArrayList<member> members = new ArrayList<member>();
+					while(t_id == t_index) {
+						int m_num = rs.getInt(3);
+						String m_name = rs.getString(4);
+						members.add(new member(m_num, m_name));
+						
+						haveRecord = rs.next();
+						if(haveRecord) 
+							t_index = rs.getInt(2);
+						else
+							break;
+					}
+					teams.add(new team(r_num, t_id, members));
+					
+					if(!haveRecord)
+						break;
+					
+					r_index = rs.getInt(1);
+				}
+				result.add(new rotation(r_num, r_start, r_end, teams));
+				
+				if(!haveRecord)
+					break;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 	
 	public static ArrayList<int[]> makeGroup(int num_mems) {
@@ -305,5 +363,25 @@ public class rotation_f {
 
 		return list;
 	}
-
+	
+//	public static void main(String[] args) {
+//		ArrayList<rotation> rotations = rotation_f.getAllRotation();
+//		System.out.println(rotations.size());
+//		for(int i = 0; i < rotations.size(); i++) {
+//			int r_id = rotations.get(i).id;
+//			System.out.println(rotations.get(i).teams.size());
+//			for(int j = 0; j < rotations.get(i).teams.size(); j++) {
+//				int t_id = rotations.get(i).teams.get(j).t_id;
+//				System.out.println(rotations.get(i).teams.get(j).members.size());
+//				for(int k = 0; k < rotations.get(i).teams.get(j).members.size(); k++) {
+//					int m_num = rotations.get(i).teams.get(j).members.get(k).num;
+//					String m_name = rotations.get(i).teams.get(j).members.get(k).name;
+//					
+//					System.out.print(r_id + " " + t_id + " " + m_num + " " + m_name + " " + rotations.get(i).startDate + " " + rotations.get(i).endDate + "\n");
+//				}
+//			}
+//			
+//		}
+//		
+//	}
 }

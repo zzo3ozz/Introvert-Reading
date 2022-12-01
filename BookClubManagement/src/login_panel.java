@@ -19,12 +19,12 @@ public class login_panel extends JPanel{
 
 		JLabel idLa = new JLabel("ID");
 		idLa.setBounds(10, 250, 30, 20);
-		idField = new JTextField();
+		idField = new JTextField("ad");
 		idField.setBounds(50, 250, 140, 20);
 		
 		JLabel pwLa = new JLabel("PW");
 		pwLa.setBounds(10, 280, 30, 20);
-		pwField = new JPasswordField();
+		pwField = new JPasswordField("1234");
 		pwField.setBounds(50, 280, 140, 20);
 		
 		JButton btn = new JButton("로그인");
@@ -36,6 +36,18 @@ public class login_panel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				String id = idField.getText();
 				String pw = String.valueOf(pwField.getPassword());
+				
+				if(id.equals("")) {
+					error.setText("아이디를 입력하세요.");
+					return ;
+				}
+				
+				if(pw.equals("")) {
+					error.setText("비밀번호를 입력하세요.");
+					return ;
+				}
+		
+				
 				int state = login.tryLogin(id, pw);
 				
 				if(state == login.SUCCESS) {
@@ -54,5 +66,10 @@ public class login_panel extends JPanel{
 		add(pwField);
 		add(btn);
 		add(error);
+	}
+
+	private void setPreferedSize() {
+		// TODO Auto-generated method stub
+		
 	}
 }
