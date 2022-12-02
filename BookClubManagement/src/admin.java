@@ -146,7 +146,7 @@ public class admin extends JPanel {
 			r_list.getColumn("로테이션 시작일").setPreferredWidth(190);
 			r_list.getColumn("로테이션 종료일").setPreferredWidth(190);
 			r_list.getColumn("팀 구분").setPreferredWidth(70);
-			r_list.getColumn("구성 멤버").setPreferredWidth(297);
+			r_list.getColumn("구성 멤버").setPreferredWidth(296);
 			r_list.getTableHeader().setReorderingAllowed(false);
 			r_list.getTableHeader().setResizingAllowed(false);
 			
