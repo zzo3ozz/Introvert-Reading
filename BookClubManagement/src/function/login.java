@@ -12,6 +12,7 @@ public class login {
 	public static int tryLogin(String id, String pw) {
 		Connection con = DBConnect.makeConnection(); 
 		PreparedStatement pstmt = null;
+		int result;
 		
 		try {
 			String sql = "select m_num, id, pw, m_name, level from Member where id = ?";
@@ -33,21 +34,24 @@ public class login {
 					session.login_member = mem;
 					session.login_member.printInfo();
 					 
-					return SUCCESS;
+					result = SUCCESS;
+				} else {
+					System.out.println("비밀번호가 일치하지 않습니다.");
+					result = PWERROR;
 				}
-				System.out.println("비밀번호가 일치하지 않습니다.");
-				return PWERROR;
+				
 			} else {
 				System.out.print("아이디가 존재하지 않습니다.");
-				return IDERROR;
+				result = IDERROR;
 			}
 		} catch(SQLException e) {
 			System.out.print("error!");
+			result = ERROR;
 		}
 
 		if(pstmt != null) try{ pstmt.close();} catch(SQLException e){};                   
         if(con != null) try{ con.close();} catch(SQLException e){};
         
-		return ERROR;
+		return result;
 	}
 }

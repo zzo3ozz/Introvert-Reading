@@ -8,8 +8,11 @@ import javax.swing.*;
 public class Main extends JFrame {
 	static Container c;
 	static login_panel login_pane = new login_panel();
-	static admin admin_pane = new admin();
 	static menu menu_pane;
+	static mypage mypage_pane = new mypage();
+	static admin admin_pane = new admin();
+	
+	
 	
 	public Main() {
 		// 기본 창 크기 및 설정
@@ -45,11 +48,19 @@ public class Main extends JFrame {
 			} else if(menu_pane.selected == 1) {
 				
 			} else if(menu_pane.selected == 2) {
-				
+				mypage_pane.addComponentListener(new ComponentAdapter() {
+					public void componentHidden(ComponentEvent e) {
+						Component com = e.getComponent();
+						c.remove(com);
+						c.repaint();
+					}
+				});
+				c.add(mypage_pane);
 			} else if(menu_pane.selected == 3){
 				admin_pane.addComponentListener(new ComponentAdapter() {
 					public void componentHidden(ComponentEvent e) {
 						Component com = e.getComponent();
+						c.remove(com);
 						c.repaint();
 					}
 				});
