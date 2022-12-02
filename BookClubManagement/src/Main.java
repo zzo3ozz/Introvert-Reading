@@ -9,7 +9,7 @@ public class Main extends JFrame {
 	static Container c;
 	static login_panel login_pane = new login_panel();
 	static menu menu_pane;
-	static mypage mypage_pane = new mypage();
+	static mypage mypage_pane;
 	static admin admin_pane = new admin();
 	
 	
@@ -36,6 +36,7 @@ public class Main extends JFrame {
 			Component com = e.getComponent();
 			c.remove(com);
 			menu_pane = new menu();
+			mypage_pane = new mypage();
 			menu_pane.addComponentListener(new menuClose());
 			c.add(menu_pane);
 		}

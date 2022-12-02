@@ -3,6 +3,8 @@ package struct;
 import function.DBConnect;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class member {
 	public final static int SUCCESS = 1;
@@ -31,6 +33,10 @@ public class member {
 		}
 	}
 	
+	public int getNum() {
+		return this.num;
+	}
+	
 	public int getLevel() {
 		return this.level;
 	}
@@ -41,6 +47,49 @@ public class member {
 	
 	public void printInfo() {
 		System.out.print(this.num + " " + this.id + " " + this.name + " " + this.level);
+	}
+	
+	public static ArrayList<String> getMyRotation(int num) {
+		Connection con = DBConnect.makeConnection();
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
+		ArrayList<String> list = new ArrayList<String>();
+		
+		try {
+			String sql = "select r_num, t_id, r_start, r_end from mypage where m_num=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				int r_num = rs.getInt(1);
+				int t_id = rs.getInt(2);
+				String r_start = rs.getDate(3).toString();
+				String r_end = rs.getDate(4).toString();
+				
+				String mem_sql = "select m_name from rotation_view where r_num=? and t_id=?";
+				pstmt1 = con.prepareStatement(mem_sql);
+				pstmt1.setInt(1, r_num);
+				pstmt1.setInt(2, t_id);
+				ResultSet rs1 = pstmt1.executeQuery();
+				String members = "";
+				
+				while(rs1.next()) {
+					members += (rs1.getString(1) + ", ");
+				}
+				members = members.substring(0, members.length() - 2);
+				
+				String result = Integer.toString(r_num) + "/" + Integer.toString(t_id) + "/" + r_start + "/" + r_end + "/" + members;
+				list.add(result);
+			}
+			rs.close();			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		if(pstmt != null) try{ pstmt.close();} catch(SQLException e){};
+		if(pstmt1 != null) try{ pstmt1.close();} catch(SQLException e){};
+		if(con != null) try{ con.close();} catch(SQLException e){};
+		return list;
 	}
 	
 	public int changePass(String nowPW, String newPW) {
