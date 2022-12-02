@@ -4,7 +4,6 @@ import struct.*;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
@@ -289,13 +288,16 @@ public class rotation_f {
 				}
 				result.add(new rotation(r_num, r_start, r_end, teams));
 				
-				if(!haveRecord)
+				if(!haveRecord) {
+					rs.close();
 					break;
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+		if(pstmt != null) try{ pstmt.close();} catch(SQLException e){};
+		if(con != null) try{ con.close();} catch(SQLException e){};
 		return result;
 	}
 	
