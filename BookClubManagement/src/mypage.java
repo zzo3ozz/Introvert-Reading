@@ -1,13 +1,13 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
 
 import function.rotation_f;
 import function.session;
+import function.login;
 import struct.member;
 import struct.rotation;
 
@@ -22,6 +22,8 @@ public class mypage extends JPanel {
 		setBounds(700, 0, 300, 700);
 		setLayout(new FlowLayout());
 		
+		add(new BackButton());
+		
 		myRtnPane myRtn = new myRtnPane();
 		changePWPane changePW = new changePWPane();
 		
@@ -32,9 +34,7 @@ public class mypage extends JPanel {
 		
 		for(int i = 0; i < MENU_NUM; i++) {
 			btn_list[i].addActionListener(new ActionListener() {
-				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
 					JButton btn = (JButton)e.getSource();
 					
 					for(int j = 0; j < MENU_NUM; j++) {
@@ -43,8 +43,10 @@ public class mypage extends JPanel {
 						}
 					}
 					setVisible(false);
+					session.stored_page = session.page_name.MYPAGE;
 					
 					if(selected == 0) {
+						Main.c.add(new navigation());
 						Main.c.add(myRtn);
 					} else {
 						Main.c.add(changePW);
@@ -58,14 +60,23 @@ public class mypage extends JPanel {
 	
 	public static class myRtnPane extends JPanel {
 		public myRtnPane() {
-			setBackground(Color.ORANGE);
-			setBounds(70, 0, 930, 700);
-			setPreferredSize(new Dimension(930, 700));
+			setBounds(0, 0, 1000, 700);
 			setLayout(null);
+			
+			BackButton back_btn = new BackButton();
+			back_btn.setBounds(10, 10, 20, 20);
+			add(back_btn);
+			
+			JPanel content = new JPanel();
+						
+			content.setBackground(Color.ORANGE);
+			content.setBounds(70, 0, 930, 700);
+			content.setPreferredSize(new Dimension(930, 700));
+			content.setLayout(null);
 			
 			JLabel la = new JLabel("참여한 로테이션 목록");
 			la.setBounds(30, 30, 200, 30);
-			add(la);
+			content.add(la);
 			
 			JPanel pan = new JPanel();
 			pan.setBounds(30, 60, 850, 570);
@@ -89,7 +100,7 @@ public class mypage extends JPanel {
 			r_list.getTableHeader().setResizingAllowed(false);
 
 
-			ArrayList<String> myRL = member.getMyRotation(session.login_member.getNum());
+			ArrayList<String> myRL = rotation_f.getMyRotation(session.login_member.getNum());
 			for(int i = 0; i < myRL.size(); i++) {
 				String[] line = myRL.get(i).split("/");
 				model.addRow(line);
@@ -101,7 +112,8 @@ public class mypage extends JPanel {
 			list.setSize(850, 570);
 			
 			pan.add(list);
-			add(pan);
+			content.add(pan);
+			add(content);
 		}
 	}
 
@@ -139,12 +151,12 @@ public class mypage extends JPanel {
 						error.setText("새 비밀번호가 일치하지 않습니다.");
 						field[2].requestFocus();
 					} else {
-						int result = session.login_member.changePass(now_pw, new_pw);
+						int result = login.changePass(session.login_member.getNum(), now_pw, new_pw);
 						
 						String message = "";
-						if(result == member.SUCCESS)
+						if(result == login.SUCCESS)
 							message = "변경되었습니다.";
-						else if (result == member.DISMATCH)
+						else if (result == login.PWERROR)
 							message = "등록된 비밀번호가 아닙니다.";
 						else
 							message = "변경에 실패하였습니다.";
@@ -158,7 +170,6 @@ public class mypage extends JPanel {
 			
 			for(int i = 0; i < 3; i++)
 				field[i] = new JPasswordField(15);
-			
 			
 			add(la1); add(field[0]);
 			add(la2); add(field[1]);

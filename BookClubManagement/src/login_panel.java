@@ -38,11 +38,13 @@ public class login_panel extends JPanel{
 				String pw = String.valueOf(pwField.getPassword());
 				
 				if(id.equals("")) {
+					idField.requestFocus();
 					error.setText("아이디를 입력하세요.");
 					return ;
 				}
 				
 				if(pw.equals("")) {
+					pwField.requestFocus();
 					error.setText("비밀번호를 입력하세요.");
 					return ;
 				}
@@ -53,8 +55,10 @@ public class login_panel extends JPanel{
 				if(state == login.SUCCESS) {
 					setVisible(false);
 				} else if(state == login.IDERROR) {
+					idField.requestFocus();
 					error.setText("등록된 아이디가 없습니다.");
 				} else if(state == login.PWERROR) {
+					pwField.requestFocus();
 					error.setText("비밀번호가 일치하지 않습니다.");
 				}
 			}
@@ -66,10 +70,5 @@ public class login_panel extends JPanel{
 		add(pwField);
 		add(btn);
 		add(error);
-	}
-
-	private void setPreferedSize() {
-		// TODO Auto-generated method stub
-		
 	}
 }

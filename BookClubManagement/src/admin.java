@@ -5,22 +5,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.time.LocalDate;
-
 import net.sourceforge.jdatepicker.impl.*;
 
 import function.rotation_f;
+import function.session;
 import struct.rotation;
 
 public class admin extends JPanel {
 	final int MENU_NUM = 2; 
 	public int selected;
-	public static searchP search = new searchP();
-	public static enrollP enroll = new enrollP();
+	public static searchP search;
+	public static enrollP enroll;
 
 	public admin() {
 		setBackground(Color.ORANGE);
 		setBounds(700, 0, 300, 700);
 		setLayout(new FlowLayout());
+		
+		add(new BackButton());
+		
+		search = new searchP();
+		enroll = new enrollP();
 		
 		JButton[] btn_list = new JButton[MENU_NUM];
 		
@@ -29,7 +34,6 @@ public class admin extends JPanel {
 		
 		for(int i = 0; i < MENU_NUM; i++) {
 			btn_list[i].addActionListener(new ActionListener() {
-				@Override
 				public void actionPerformed(ActionEvent e) {
 					JButton btn = (JButton)e.getSource();
 					
@@ -39,7 +43,7 @@ public class admin extends JPanel {
 						}
 					}
 					setVisible(false);
-					
+					session.stored_page = session.page_name.ADMIN;
 					if(selected == 0) {
 						Main.c.add(enroll);
 					} else {
@@ -49,6 +53,8 @@ public class admin extends JPanel {
 			});
 			add(btn_list[i]);
 		}
+		
+		
 	}
 	
 	public static class enrollP extends JPanel {
@@ -120,14 +126,21 @@ public class admin extends JPanel {
 	
 	public static class searchP extends JPanel {
 		public searchP() {
-			setBackground(Color.ORANGE);
-			setBounds(70, 0, 930, 700);
-			setPreferredSize(new Dimension(930, 700));
+			setBounds(0, 0, 1000, 700);
 			setLayout(null);
+			
+			add(new navigation());
+			
+			JPanel content = new JPanel();
+						
+			content.setBackground(Color.ORANGE);
+			content.setBounds(70, 0, 930, 700);
+			content.setPreferredSize(new Dimension(930, 700));
+			content.setLayout(null);
 			
 			JLabel la = new JLabel("로테이션 목록");
 			la.setBounds(30, 30, 200, 30);
-			add(la);
+			content.add(la);
 			
 			JPanel pan = new JPanel();
 			pan.setBounds(30, 60, 850, 570);
@@ -170,7 +183,8 @@ public class admin extends JPanel {
 			list.setSize(850, 570);
 			
 			pan.add(list);
-			add(pan);
+			content.add(pan);
+			add(content);
 		}
 	}
 	

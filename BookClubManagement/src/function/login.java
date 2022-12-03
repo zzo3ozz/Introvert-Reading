@@ -32,20 +32,15 @@ public class login {
 					con.close();
 					
 					session.login_member = mem;
-					session.login_member.printInfo();
-					 
 					result = SUCCESS;
 				} else {
-					System.out.println("비밀번호가 일치하지 않습니다.");
 					result = PWERROR;
 				}
 				
 			} else {
-				System.out.print("아이디가 존재하지 않습니다.");
 				result = IDERROR;
 			}
 		} catch(SQLException e) {
-			System.out.print("error!");
 			result = ERROR;
 		}
 
@@ -53,5 +48,51 @@ public class login {
         if(con != null) try{ con.close();} catch(SQLException e){};
         
 		return result;
+	}
+
+	public static int changePass(int r_num, String nowPW, String newPW) {
+		Connection con = DBConnect.makeConnection();
+		PreparedStatement pstmt = null;
+		int result;
+		
+		try {// DB에 저장된 pw값 가져오기
+			String select = "select pw from Member where m_num = ?";
+			pstmt = con.prepareStatement(select);
+			pstmt.setInt(1, r_num);
+			ResultSet rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				String dbPW = rs.getString(1);
+
+				if(nowPW.equals(dbPW)) {
+					String update = "update Member set pw = ? where m_num = ?";
+					
+					pstmt = con.prepareStatement(update);
+					pstmt.setString(1, newPW);
+					pstmt.setInt(2, r_num);
+					
+					int i = pstmt.executeUpdate();
+					
+					if (i == 1) {
+						result = SUCCESS;
+					} else {
+						result = ERROR;
+					}
+				} else {
+					result =  PWERROR;
+				}
+			} else {
+				result = ERROR;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			result = ERROR;
+		}
+		
+		if(pstmt != null) try{ pstmt.close();} catch(SQLException e){};                   
+        if(con != null) try{ con.close();} catch(SQLException e){};
+        
+        return result;
 	}
 }

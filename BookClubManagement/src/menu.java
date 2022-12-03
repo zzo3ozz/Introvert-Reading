@@ -29,16 +29,16 @@ public class menu extends JPanel {
 		
 		for(int i = 0; i < MENU_NUM; i++) {
 			btn_list[i].addActionListener(new ActionListener() {
-				@Override
 				public void actionPerformed(ActionEvent e) {
 					JButton btn = (JButton)e.getSource();
 					
 					for(int j = 0; j < MENU_NUM; j++) {
-						if(btn.equals(btn_list[j])) {
+						if(btn.equals(btn_list[j]))
 							selected = j;
-						}
 					}
+					
 					setVisible(false);
+					session.stored_page = session.page_name.MENU;
 				}
 			});
 			add(btn_list[i]);
