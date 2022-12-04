@@ -6,19 +6,20 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class Main extends JFrame {
-	static Container c;
-	static login_panel login_pane = new login_panel();
-	static menu menu_pane;
-	static mypage mypage_pane;
-	static admin admin_pane = new admin();
-	
-	
+	public static Container c = null;
+	public static login_panel login_pane = new login_panel();
+	public static menu menu_pane = null;
+	public static rotation_panel rotation_pane = null;
+	public static book_list book_pane = null;
+	public static mypage mypage_pane = null;
+	public static admin admin_pane = null;
 	
 	public Main() {
 		// 기본 창 크기 및 설정
 		setTitle("내향적 책읽기");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(1000, 700);
+		getRootPane().setPreferredSize(new Dimension(1000, 650));
+		pack();
 		setResizable(false);
 		setLocationRelativeTo(null);
 		
@@ -27,7 +28,7 @@ public class Main extends JFrame {
 		
 		login_pane.addComponentListener(new loginClose());
 		c.add(login_pane);
-			
+		
 		setVisible(true);
 	}
 	
@@ -36,39 +37,38 @@ public class Main extends JFrame {
 			Component com = e.getComponent();
 			c.remove(com);
 			menu_pane = new menu();
+			rotation_pane = new rotation_panel();
+			book_pane = new book_list();
 			mypage_pane = new mypage();
-			menu_pane.addComponentListener(new menuClose());
+			admin_pane = new admin();
+			menu_pane.addComponentListener(new menuHidden());
 			c.add(menu_pane);
 		}
 	}
 	
-	public class menuClose extends ComponentAdapter{
+	public class menuHidden extends ComponentAdapter{
 		public void componentHidden(ComponentEvent e) {
 			if(menu_pane.selected == 0) {
-				
+				c.add(rotation_pane);
+				c.repaint();
 			} else if(menu_pane.selected == 1) {
-				
+				c.add(book_pane);
+				c.repaint();
 			} else if(menu_pane.selected == 2) {
-				mypage_pane.addComponentListener(new ComponentAdapter() {
-					public void componentHidden(ComponentEvent e) {
-						Component com = e.getComponent();
-						c.remove(com);
-						c.repaint();
-					}
-				});
+				mypage_pane.addComponentListener(new hide_submenu());
 				c.add(mypage_pane);
 			} else if(menu_pane.selected == 3){
-				admin_pane.addComponentListener(new ComponentAdapter() {
-					public void componentHidden(ComponentEvent e) {
-						Component com = e.getComponent();
-						c.remove(com);
-						c.repaint();
-					}
-				});
+				admin_pane.addComponentListener(new hide_submenu());
 				c.add(admin_pane);
 			} else {
-				
+				menu_pane.setVisible(true);
 			}
+		}
+	}
+	
+	public class hide_submenu extends ComponentAdapter {
+		public void componentHidden(ComponentEvent e) {
+			c.repaint();
 		}
 	}
 	

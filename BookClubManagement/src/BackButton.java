@@ -11,7 +11,7 @@ public class BackButton extends JButton {
 		setText("뒤로가기");
 		addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Component com = ((Component) e.getSource()).getParent();
+				Component com = ((BackButton)e.getSource()).getParent();
 				
 				if(com instanceof navigation) {
 					com = com.getParent();

@@ -46,7 +46,6 @@ public class mypage extends JPanel {
 					session.stored_page = session.page_name.MYPAGE;
 					
 					if(selected == 0) {
-						Main.c.add(new navigation());
 						Main.c.add(myRtn);
 					} else {
 						Main.c.add(changePW);
@@ -60,26 +59,23 @@ public class mypage extends JPanel {
 	
 	public static class myRtnPane extends JPanel {
 		public myRtnPane() {
-			setBounds(0, 0, 1000, 700);
+			setBounds(0, 0, 1000, 650);
 			setLayout(null);
 			
-			BackButton back_btn = new BackButton();
-			back_btn.setBounds(10, 10, 20, 20);
-			add(back_btn);
+			add(new navigation());
 			
 			JPanel content = new JPanel();
 						
 			content.setBackground(Color.ORANGE);
-			content.setBounds(70, 0, 930, 700);
-			content.setPreferredSize(new Dimension(930, 700));
+			content.setBounds(70, 0, 930, 650);
 			content.setLayout(null);
 			
 			JLabel la = new JLabel("참여한 로테이션 목록");
-			la.setBounds(30, 30, 200, 30);
+			la.setBounds(50, 30, 200, 30);
 			content.add(la);
 			
 			JPanel pan = new JPanel();
-			pan.setBounds(30, 60, 850, 570);
+			pan.setBounds(50, 80, 830, 520);
 			pan.setLayout(null);
 			
 			String header[] = {"로테이션 회차", "팀 구분", "로테이션 시작일", "로테이션 종료일", "구성 멤버"};
@@ -90,12 +86,13 @@ public class mypage extends JPanel {
 			};
 			
 			JTable r_list = new JTable(model);
-			r_list.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-			r_list.getColumn("로테이션 회차").setPreferredWidth(100);
+			r_list.setSize(830, 520);
+			r_list.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+			r_list.getColumn("로테이션 회차").setPreferredWidth(90);
+			r_list.getColumn("로테이션 시작일").setPreferredWidth(150);
+			r_list.getColumn("로테이션 종료일").setPreferredWidth(150);
 			r_list.getColumn("팀 구분").setPreferredWidth(70);
-			r_list.getColumn("로테이션 시작일").setPreferredWidth(190);
-			r_list.getColumn("로테이션 종료일").setPreferredWidth(190);
-			r_list.getColumn("구성 멤버").setPreferredWidth(296);
+			r_list.getColumn("구성 멤버").setPreferredWidth(277);
 			r_list.getTableHeader().setReorderingAllowed(false);
 			r_list.getTableHeader().setResizingAllowed(false);
 
@@ -108,8 +105,8 @@ public class mypage extends JPanel {
 
 			
 			JScrollPane list = new JScrollPane(r_list);
-			list.setPreferredSize(new Dimension(850, 570));
-			list.setSize(850, 570);
+			list.setPreferredSize(new Dimension(830, 520));
+			list.setSize(830, 520);
 			
 			pan.add(list);
 			content.add(pan);
@@ -132,7 +129,6 @@ public class mypage extends JPanel {
 			JButton btn = new JButton("변경하기");
 			
 			btn.addActionListener(new ActionListener() {
-				@Override
 				public void actionPerformed(ActionEvent e) {
 					String now_pw = String.valueOf(field[0].getPassword());
 					String new_pw = String.valueOf(field[1].getPassword());
@@ -176,6 +172,7 @@ public class mypage extends JPanel {
 			add(la3); add(field[2]);
 			add(error);
 			add(btn);
+			add(new BackButton());
 		}
 		
 	}

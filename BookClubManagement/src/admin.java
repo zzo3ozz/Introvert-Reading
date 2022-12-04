@@ -19,7 +19,7 @@ public class admin extends JPanel {
 
 	public admin() {
 		setBackground(Color.ORANGE);
-		setBounds(700, 0, 300, 700);
+		setBounds(700, 0, 300, 650);
 		setLayout(new FlowLayout());
 		
 		add(new BackButton());
@@ -60,7 +60,7 @@ public class admin extends JPanel {
 	public static class enrollP extends JPanel {
 		public enrollP() {
 			setBackground(Color.orange);
-			setBounds(700, 0, 300, 700);
+			setBounds(700, 0, 300, 650);
 			setLayout(new FlowLayout());
 			
 			JLabel la1 = new JLabel("로테이션 시작일");
@@ -114,6 +114,7 @@ public class admin extends JPanel {
 			add(la2); add(datePicker2);
 			add(la3);
 			add(btn);
+			add(new BackButton());
 		}
 		
 		public JDatePickerImpl createDatePicker() {
@@ -126,7 +127,7 @@ public class admin extends JPanel {
 	
 	public static class searchP extends JPanel {
 		public searchP() {
-			setBounds(0, 0, 1000, 700);
+			setBounds(0, 0, 1000, 650);
 			setLayout(null);
 			
 			add(new navigation());
@@ -134,16 +135,15 @@ public class admin extends JPanel {
 			JPanel content = new JPanel();
 						
 			content.setBackground(Color.ORANGE);
-			content.setBounds(70, 0, 930, 700);
-			content.setPreferredSize(new Dimension(930, 700));
+			content.setBounds(70, 0, 930, 650);
 			content.setLayout(null);
 			
 			JLabel la = new JLabel("로테이션 목록");
-			la.setBounds(30, 30, 200, 30);
+			la.setBounds(50, 30, 200, 30);
 			content.add(la);
 			
 			JPanel pan = new JPanel();
-			pan.setBounds(30, 60, 850, 570);
+			pan.setBounds(50, 80, 830, 520);
 			pan.setLayout(null);
 
 			String header[] = {"로테이션 회차", "로테이션 시작일", "로테이션 종료일", "팀 구분", "구성 멤버"};
@@ -154,12 +154,13 @@ public class admin extends JPanel {
 			};
 			
 			JTable r_list = new JTable(model);
-			r_list.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-			r_list.getColumn("로테이션 회차").setPreferredWidth(100);
-			r_list.getColumn("로테이션 시작일").setPreferredWidth(190);
-			r_list.getColumn("로테이션 종료일").setPreferredWidth(190);
+			r_list.setSize(830, 520);
+			r_list.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+			r_list.getColumn("로테이션 회차").setPreferredWidth(90);
+			r_list.getColumn("로테이션 시작일").setPreferredWidth(150);
+			r_list.getColumn("로테이션 종료일").setPreferredWidth(150);
 			r_list.getColumn("팀 구분").setPreferredWidth(70);
-			r_list.getColumn("구성 멤버").setPreferredWidth(296);
+			r_list.getColumn("구성 멤버").setPreferredWidth(277);
 			r_list.getTableHeader().setReorderingAllowed(false);
 			r_list.getTableHeader().setResizingAllowed(false);
 			
@@ -179,8 +180,8 @@ public class admin extends JPanel {
 			}
 			
 			JScrollPane list = new JScrollPane(r_list);
-			list.setPreferredSize(new Dimension(850, 570));
-			list.setSize(850, 570);
+			list.setPreferredSize(new Dimension(830, 520));
+			list.setSize(830, 520);
 			
 			pan.add(list);
 			content.add(pan);

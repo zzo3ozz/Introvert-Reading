@@ -14,7 +14,7 @@ public class menu extends JPanel {
 		}
 		
 		setBackground(Color.ORANGE);
-		setBounds(700, 0, 300, 700);
+		setBounds(700, 0, 300, 650);
 		setLayout(new FlowLayout());
 		
 		JButton[] btn_list = new JButton[MENU_NUM];
@@ -42,6 +42,23 @@ public class menu extends JPanel {
 				}
 			});
 			add(btn_list[i]);
+		}
+	}
+
+	public class logoutButton extends JButton{
+		public logoutButton() {
+			setBounds(10, 600, 30, 30);
+			setText("로그아웃");
+//			addActionListener(new ActionListener() {
+//				public void actionPerformed(ActionEvent e) {
+//					session.login_member = null;
+//					session.stored_page = -1;
+//					
+//					Main.c.add(Main.login_pane);
+//					Main.login_pane.setVisible(false);
+//					Main.login_pane.setVisible(true);
+//				}
+//			});
 		}
 	}
 }
