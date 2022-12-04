@@ -301,6 +301,83 @@ public class rotation_f {
 		return result;
 	}
 	
+	// 현재 로테이션 정보 가져오기
+	
+	// 현재 내가 참여하고 있는 팀 정보 가져오기
+	public static team getNowTeam(int m_num) {
+		team now_team = null;
+		LocalDate now_date = LocalDate.of(2021, 5, 4); // LocalDate.now();
+		
+		Connection con = DBConnect.makeConnection();
+		PreparedStatement pstmt = null;
+		
+		try {
+			String sql = "select r_num, t_id, r_start, r_end from rotation_view where (r_start <= ? and r_end >= ?) and m_num = ?";
+			pstmt = con.prepareStatement(sql);
+			
+			pstmt.setDate(1, java.sql.Date.valueOf(now_date));
+			pstmt.setDate(2, java.sql.Date.valueOf(now_date));
+			pstmt.setInt(3, m_num);
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				int r_num = rs.getInt(1);
+				int t_id = rs.getInt(2);
+				LocalDate start = rs.getDate(3).toLocalDate();
+				LocalDate end = rs.getDate(4).toLocalDate();
+				
+				String sql2 = "select m_name, b_id from rotation_view where r_num=? and t_id=? order by tm_order";
+				pstmt = con.prepareStatement(sql2);
+				pstmt.setInt(1, r_num);
+				pstmt.setInt(2, t_id);
+				
+				ResultSet rs2 = pstmt.executeQuery();
+				
+				ArrayList<member> members = new ArrayList<member>();
+				ArrayList<book> books = new ArrayList<book>();
+				
+				while(rs2.next()) {
+					String m_name = rs2.getString(1);
+					int b_id = rs2.getInt(2);
+					members.add(new member(m_name));
+					books.add(new book(b_id));
+				}
+				
+				for(int i = 0; i < books.size(); i++) {
+					int b_id = books.get(i).getID();
+					
+					if(b_id == 0) {
+						books.get(i).setTitle("-");
+					} else {
+						String sql3 = "select title from book where b_id=?";
+						pstmt = con.prepareStatement(sql3);
+						pstmt.setInt(1, b_id);
+						rs2 = pstmt.executeQuery();
+						
+						if(rs2.next()) {
+							String title = rs2.getString(1);
+							books.get(i).setTitle(title);
+						}
+			
+					}
+				}
+				
+				rs2.close();
+				now_team = new team(r_num, t_id, start, end, members, books);
+			}
+			rs.close();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(pstmt != null) try{ pstmt.close();} catch(SQLException e){};
+        if(con != null) try{ con.close();} catch(SQLException e){};
+		
+		return now_team;
+	}
+	
+	// 내가 참여한 모든 로테이션 정보 가져오기
 	public static ArrayList<String> getMyRotation(int num) {
 		Connection con = DBConnect.makeConnection();
 		PreparedStatement pstmt = null;

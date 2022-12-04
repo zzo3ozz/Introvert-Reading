@@ -12,7 +12,11 @@ public class member {
 	private String id;
 	private String name;
 	private int level;
-		
+	
+	public member(String name) {
+		this.name = name;
+	}
+	
 	public member(int num, String name) {
 		this.num = num;
 		this.name = name;
