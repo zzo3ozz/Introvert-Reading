@@ -69,13 +69,33 @@ public class team {
 		String result = "";
 		
 		for(int i = 0; i < this.books.size(); i++) {
-			result += "「";
-			result += books.get(i).getTitle();
-			result += "」";
+			if(books.get(i).getID() == null)
+				result += "-";
+			else {
+				result += "「";
+				result += books.get(i).getTitle();
+				result += "」";
+			}
 			result += ", ";
 		}
 		result = result.substring(0, result.length() - 2);
 		
 		return result;
+	}
+
+	public String getNextMember(int my_num) {
+		String name = "";
+		for(int i = 0; i < members.size(); i++) {
+			if (members.get(i).getNum() == my_num) {
+				int index = i;
+				if(i != members.size() - 1)
+					index = i + 1;
+				else 
+					index = 0;
+				name = members.get(index).getName();
+				break;
+			}
+		}
+		return name;
 	}
 }

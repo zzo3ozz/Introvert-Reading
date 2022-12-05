@@ -326,7 +326,8 @@ public class rotation_f {
 		PreparedStatement pstmt = null;
 		
 		try {
-			String sql = "select r_num, t_id, r_start, r_end from rotation_view where (r_start <= ? and r_end >= ?) and m_num = ?";
+			String sql = "select r_num, t_id, r_start, r_end from rotation_view "
+					+ "where (r_start <= ? and r_end >= ?) and m_num = ?";
 			pstmt = con.prepareStatement(sql);
 			
 			pstmt.setDate(1, java.sql.Date.valueOf(now_date));
@@ -363,16 +364,14 @@ public class rotation_f {
 				for(int i = 0; i < books.size(); i++) {
 					String b_id = books.get(i).getID();
 					
-					if(b_id == null) {
-						books.get(i).setTitle("-");
-					} else {
-						String sql3 = "select title, author, cover, genre, owner from book where isbn=?";
+					if(b_id != null) {
+						String sql3 = "select title, author, cover, genre, owner, owner_name from booklist where isbn=?";
 						pstmt = con.prepareStatement(sql3);
 						pstmt.setString(1, b_id);
 						rs2 = pstmt.executeQuery();
 						
 						if(rs2.next()) {
-							books.get(i).setInfo(rs2.getString(1), rs2.getString(2), rs2.getString(3), rs2.getString(4), rs2.getInt(5));
+							books.get(i).setInfo(rs2.getString(1), rs2.getString(2), rs2.getString(3), rs2.getString(4), rs2.getInt(5), rs2.getString(6));
 						}
 					}
 					
@@ -394,7 +393,100 @@ public class rotation_f {
 	}
 	
 	// 현재 나의 독서정보 가져오기
-	
+	public static reading getNowReading(int r_num, int m_num) {
+		reading result = null;
+		LocalDate now_date = LocalDate.of(2022, 1, 3);//LocalDate.now();
+		
+		Connection con = DBConnect.makeConnection();
+		PreparedStatement pstmt = null;
+		
+		try {
+			String sql = "select isbn, read_start, read_end from reading "
+					+ "where r_num=? and (read_start <= ? and read_end >= ?) and m_num = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, r_num);
+			pstmt.setDate(2, java.sql.Date.valueOf(now_date));
+			pstmt.setDate(3, java.sql.Date.valueOf(now_date));
+			pstmt.setInt(4, m_num);
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			String isbn = null;
+			LocalDate start = null;
+			LocalDate end = null;
+			book now_book = new book(null);
+						
+			if(rs.next()) {
+				isbn = rs.getString(1);
+				start = rs.getDate(2).toLocalDate();
+				end = rs.getDate(3).toLocalDate();
+				
+				if(isbn != null) {
+					String bookInfo = "select title, author, cover, genre, owner, owner_name from booklist where isbn=?";
+					pstmt = con.prepareStatement(bookInfo);
+					pstmt.setString(1, isbn);
+					rs = pstmt.executeQuery();
+						
+					if(rs.next()) {
+						String title = rs.getString(1);
+						String author = rs.getString(2);
+						String cover = rs.getString(3);
+						String genre = rs.getString(4);
+						int owner = rs.getInt(5);
+						String owner_name = rs.getString(6);
+						
+						now_book = new book(isbn, title, author, cover, genre, owner, owner_name);
+					}
+				}
+			}
+			
+			reading next_reading = null;
+		
+			String nextSql = "select isbn, read_start, read_end from reading where r_num=? and m_num=? and read_start > ? "
+					+ "order by read_start limit 1";
+			pstmt = con.prepareStatement(nextSql);
+			pstmt.setInt(1, r_num);
+			pstmt.setInt(2, m_num);
+			pstmt.setDate(3, java.sql.Date.valueOf(now_date));
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				String next_isbn = rs.getString(1);
+				LocalDate next_start = rs.getDate(2).toLocalDate();
+				LocalDate next_end = rs.getDate(3).toLocalDate();
+				book next_book = new book(next_isbn);
+				
+				if(next_isbn != null) {
+					String bookInfo = "select title, author, cover, genre, owner, owner_name from booklist where isbn=?";
+					pstmt = con.prepareStatement(bookInfo);
+					pstmt.setString(1, next_isbn);
+					rs = pstmt.executeQuery();
+						
+					if(rs.next()) {
+						String next_title = rs.getString(1);
+						String next_author = rs.getString(2);
+						String next_cover = rs.getString(3);
+						String next_genre = rs.getString(4);
+						int next_owner = rs.getInt(5);
+						String next_owner_name = rs.getString(6);
+						
+						next_book = new book(next_isbn, next_title, next_author, next_cover, next_genre, next_owner, next_owner_name);
+					}
+				}
+				next_reading = new reading(r_num, next_start, next_end, next_book);
+			}
+			rs.close();
+			result = new reading(r_num, start, end, now_book, next_reading);			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(pstmt != null) try{ pstmt.close();} catch(SQLException e){};
+        if(con != null) try{ con.close();} catch(SQLException e){};
+
+		return result;
+	}
+
 	// 내가 참여한 모든 로테이션 정보 가져오기
 	public static ArrayList<String> getMyRotation(int num) {
 		Connection con = DBConnect.makeConnection();
