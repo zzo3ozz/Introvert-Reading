@@ -167,16 +167,18 @@ public class admin extends JPanel {
 			ArrayList<rotation> rt = rotation_f.getAllRotation();
 			int rt_num = rt.size();
 			
-			ArrayList<String[]> strs = new ArrayList<String[]>();
-			ArrayList<String[]> test = rt.get(0).getColumn();
-
-			for(int i = 0; i < rt_num; i++) {
-				strs.addAll(rt.get(i).getColumn());
-			}
-			
-			for(int i = 0; i < strs.size(); i++) {
-				String[] line = strs.get(i);
-				model.addRow(line);
+			if(rt_num != 0) {
+				ArrayList<String[]> strs = new ArrayList<String[]>();
+				ArrayList<String[]> test = rt.get(0).getColumn();
+	
+				for(int i = 0; i < rt_num; i++) {
+					strs.addAll(rt.get(i).getColumn());
+				}
+				
+				for(int i = 0; i < strs.size(); i++) {
+					String[] line = strs.get(i);
+					model.addRow(line);
+				}
 			}
 			
 			JScrollPane list = new JScrollPane(r_list);

@@ -6,6 +6,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class rotation_f {
 	public final static int BEFORE_START = -3;
@@ -67,7 +68,7 @@ public class rotation_f {
 				ArrayList<int[]> group = makeGroup(num_mems);
 				String team_sql = "insert Team values (?, ?)";
 				String tmem_sql = "insert TMember (m_num, r_num, t_id, tm_order) values (?, ?, ?, ?)";
-				String read_sql = "insert Reading (m_num, r_num, t_id, read_start, read_end) values (?, ?, ?, ?, ?)";
+				String read_sql = "insert Reading (m_num, r_num, t_id, read_start, read_end, b_owner) values (?, ?, ?, ?, ?, ?)";
 				
 				pstmt = con.prepareStatement(team_sql);
 				pstmt1 = con.prepareStatement(tmem_sql);
@@ -91,13 +92,19 @@ public class rotation_f {
 						
 						// 개인 독서 기간 그룹 생성
 						ArrayList<LocalDate[]> date_list = splitDuration(group_mem, new_start, new_end);
-						
 						for(int i = 0; i < group_mem; i++) {
 							pstmt2.setInt(1, m_num);
 							pstmt2.setInt(2, r_num);
 							pstmt2.setInt(3, t_id + 1);
 							pstmt2.setDate(4, java.sql.Date.valueOf(date_list.get(i)[0]));
 							pstmt2.setDate(5, java.sql.Date.valueOf(date_list.get(i)[1]));
+							
+							int ownerIndex = tm_order - i;
+							if(ownerIndex < 0) {
+								ownerIndex += group_mem;
+							}
+							
+							pstmt2.setInt(6, group.get(t_id)[ownerIndex]);
 							pstmt2.addBatch();
 							pstmt2.clearParameters();
 						}
@@ -143,11 +150,13 @@ public class rotation_f {
 			ResultSet rs = pstmt.executeQuery();
 			
 			int r_num = 0;
-			LocalDate r_date = LocalDate.now();
+			LocalDate r_date = null;
 			
 			if(rs.next()) {
 				r_num = rs.getInt(1);
 				r_date = rs.getDate(2).toLocalDate();
+			} else {
+				r_date = start;
 			}
 			
 			// 마지막 회차 로테이션 종료일보다 새로 설정한 시작일이 앞서면 false
@@ -173,7 +182,7 @@ public class rotation_f {
 				// 새로운 로테이션 회차, 날짜 설정
 				r_num++;
 				LocalDate new_start = start;
-				LocalDate new_end = end.minusDays(1);
+				LocalDate new_end = end;
 				
 				// Rotation 테이블 insert
 				String new_rt = "insert Rotation values (?, ?, ?)";
@@ -187,7 +196,7 @@ public class rotation_f {
 				ArrayList<int[]> group = makeGroup(num_mems);
 				String team_sql = "insert Team values (?, ?)";
 				String tmem_sql = "insert TMember (m_num, r_num, t_id, tm_order) values (?, ?, ?, ?)";
-				String read_sql = "insert Reading (m_num, r_num, t_id, read_start, read_end) values (?, ?, ?, ?, ?)";
+				String read_sql = "insert Reading (m_num, r_num, t_id, read_start, read_end, b_owner) values (?, ?, ?, ?, ?, ?)";
 				
 				pstmt = con.prepareStatement(team_sql);
 				pstmt1 = con.prepareStatement(tmem_sql);
@@ -218,6 +227,13 @@ public class rotation_f {
 							pstmt2.setInt(3, t_id + 1);
 							pstmt2.setDate(4, java.sql.Date.valueOf(date_list.get(i)[0]));
 							pstmt2.setDate(5, java.sql.Date.valueOf(date_list.get(i)[1]));
+							
+							int ownerIndex = tm_order - i;
+							if(ownerIndex < 0) {
+								ownerIndex += group_mem;
+							}
+							
+							pstmt2.setInt(6, group.get(t_id)[ownerIndex]);
 							pstmt2.addBatch();
 							pstmt2.clearParameters();
 						}
@@ -255,7 +271,7 @@ public class rotation_f {
 			ResultSet rs = pstmt.executeQuery();
 			boolean haveRecord = rs.next();
 			
-			while(true) {
+			while(haveRecord) {
 				int r_num = rs.getInt(1);
 				int r_index = r_num;
 				
@@ -301,12 +317,10 @@ public class rotation_f {
 		return result;
 	}
 	
-	// 현재 로테이션 정보 가져오기
-	
 	// 현재 내가 참여하고 있는 팀 정보 가져오기
-	public static team getNowTeam(int m_num) {
+	public static team getNowTeam(int num) {
 		team now_team = null;
-		LocalDate now_date = LocalDate.of(2021, 5, 4); // LocalDate.now();
+		LocalDate now_date = LocalDate.of(2022, 1, 3);//LocalDate.now();
 		
 		Connection con = DBConnect.makeConnection();
 		PreparedStatement pstmt = null;
@@ -317,7 +331,7 @@ public class rotation_f {
 			
 			pstmt.setDate(1, java.sql.Date.valueOf(now_date));
 			pstmt.setDate(2, java.sql.Date.valueOf(now_date));
-			pstmt.setInt(3, m_num);
+			pstmt.setInt(3, num);
 			
 			ResultSet rs = pstmt.executeQuery();
 			
@@ -327,7 +341,7 @@ public class rotation_f {
 				LocalDate start = rs.getDate(3).toLocalDate();
 				LocalDate end = rs.getDate(4).toLocalDate();
 				
-				String sql2 = "select m_name, b_id from rotation_view where r_num=? and t_id=? order by tm_order";
+				String sql2 = "select m_num, m_name, b_id from rotation_view where r_num=? and t_id=? order by tm_order";
 				pstmt = con.prepareStatement(sql2);
 				pstmt.setInt(1, r_num);
 				pstmt.setInt(2, t_id);
@@ -336,35 +350,37 @@ public class rotation_f {
 				
 				ArrayList<member> members = new ArrayList<member>();
 				ArrayList<book> books = new ArrayList<book>();
+				HashMap<Integer, book> map = new HashMap<Integer,book>(4);
 				
 				while(rs2.next()) {
-					String m_name = rs2.getString(1);
-					int b_id = rs2.getInt(2);
-					members.add(new member(m_name));
+					int m_num = rs2.getInt(1);
+					String m_name = rs2.getString(2);
+					String b_id = rs2.getString(3);
+					members.add(new member(m_num, m_name));
 					books.add(new book(b_id));
 				}
 				
 				for(int i = 0; i < books.size(); i++) {
-					int b_id = books.get(i).getID();
+					String b_id = books.get(i).getID();
 					
-					if(b_id == 0) {
+					if(b_id == null) {
 						books.get(i).setTitle("-");
 					} else {
-						String sql3 = "select title from book where b_id=?";
+						String sql3 = "select title, author, cover, genre, owner from book where isbn=?";
 						pstmt = con.prepareStatement(sql3);
-						pstmt.setInt(1, b_id);
+						pstmt.setString(1, b_id);
 						rs2 = pstmt.executeQuery();
 						
 						if(rs2.next()) {
-							String title = rs2.getString(1);
-							books.get(i).setTitle(title);
+							books.get(i).setInfo(rs2.getString(1), rs2.getString(2), rs2.getString(3), rs2.getString(4), rs2.getInt(5));
 						}
-			
 					}
+					
+					map.put(members.get(i).getNum(), books.get(i));
 				}
 				
 				rs2.close();
-				now_team = new team(r_num, t_id, start, end, members, books);
+				now_team = new team(r_num, t_id, start, end, members, books, map);
 			}
 			rs.close();
 		} catch(SQLException e) {
@@ -376,6 +392,8 @@ public class rotation_f {
 		
 		return now_team;
 	}
+	
+	// 현재 나의 독서정보 가져오기
 	
 	// 내가 참여한 모든 로테이션 정보 가져오기
 	public static ArrayList<String> getMyRotation(int num) {
@@ -427,8 +445,8 @@ public class rotation_f {
 		int three_group = 0; // 3명인 그룹 수
 			
 		if(num_mems % 4 != 0) {
-			three_group = 1;
-			four_group = four_group - (3 - (num_mems % 4));
+			three_group = 4 - (num_mems % 4);
+			four_group = four_group - (three_group - 1); 
 		}
 
 		int total = three_group + four_group;

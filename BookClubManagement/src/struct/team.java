@@ -1,6 +1,7 @@
 package struct;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.time.LocalDate;
 
 public class team {
@@ -10,6 +11,7 @@ public class team {
 	private LocalDate end;
 	private ArrayList<member> members;
 	private ArrayList<book> books;
+	private HashMap<Integer, book> map;
 	
 	public team(int r_num, int t_id, ArrayList<member> members) {
 		this.r_num = r_num;
@@ -17,13 +19,14 @@ public class team {
 		this.members = members;
 	}
 	
-	public team(int r_num, int t_id, LocalDate start, LocalDate end, ArrayList<member> members, ArrayList<book> books) {
+	public team(int r_num, int t_id, LocalDate start, LocalDate end, ArrayList<member> members, ArrayList<book> books, HashMap<Integer, book> map) {
 		this.r_num = r_num;
 		this.t_id = t_id;
 		this.start = start;
 		this.end = end;
 		this.members = members;
 		this.books = books;
+		this.map = map;
 	}
 	
 	public int get_r() {
@@ -46,6 +49,10 @@ public class team {
 		return this.members;
 	}
 	
+	public HashMap<Integer, book> get_map() {
+		return this.map;
+	}
+	
 	public String getMembersByString() {
 		String result = "";
 		
@@ -62,7 +69,9 @@ public class team {
 		String result = "";
 		
 		for(int i = 0; i < this.books.size(); i++) {
+			result += "「";
 			result += books.get(i).getTitle();
+			result += "」";
 			result += ", ";
 		}
 		result = result.substring(0, result.length() - 2);

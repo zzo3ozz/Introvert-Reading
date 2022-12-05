@@ -37,10 +37,6 @@ public class Main extends JFrame {
 			Component com = e.getComponent();
 			c.remove(com);
 			menu_pane = new menu();
-			rotation_pane = new rotation_panel();
-			book_pane = new book_list();
-			mypage_pane = new mypage();
-			admin_pane = new admin();
 			menu_pane.addComponentListener(new menuHidden());
 			c.add(menu_pane);
 		}
@@ -49,15 +45,19 @@ public class Main extends JFrame {
 	public class menuHidden extends ComponentAdapter{
 		public void componentHidden(ComponentEvent e) {
 			if(menu_pane.selected == 0) {
+				rotation_pane = new rotation_panel();
 				c.add(rotation_pane);
 				c.repaint();
 			} else if(menu_pane.selected == 1) {
+				book_pane = new book_list();
 				c.add(book_pane);
 				c.repaint();
 			} else if(menu_pane.selected == 2) {
+				mypage_pane = new mypage();
 				mypage_pane.addComponentListener(new hide_submenu());
 				c.add(mypage_pane);
 			} else if(menu_pane.selected == 3){
+				admin_pane = new admin();
 				admin_pane.addComponentListener(new hide_submenu());
 				c.add(admin_pane);
 			} else {
