@@ -33,4 +33,30 @@ public class bookCover {
 		
 		return icon;
 	}
+	
+	public static ImageIcon getIcon(int x, int y) {
+		ImageIcon icon = new ImageIcon("images/default.png");
+		Image temp_img = icon.getImage();
+		temp_img = temp_img.getScaledInstance(x, y, Image.SCALE_SMOOTH);
+		icon = new ImageIcon(temp_img);
+		
+		return icon;
+	}
+	
+	public static ImageIcon getIcon(String path, int x, int y) {
+		ImageIcon icon = new ImageIcon("images/default.png");
+		Image temp_img = icon.getImage();
+		
+		try {
+			URL url = new URL(path);
+			temp_img = ImageIO.read(url);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		temp_img = temp_img.getScaledInstance(x, y, Image.SCALE_SMOOTH);
+		icon = new ImageIcon(temp_img);
+		
+		return icon;
+	}
 }

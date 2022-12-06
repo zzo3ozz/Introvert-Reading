@@ -15,6 +15,7 @@ import function.book_f;
 import function.rotation_f;
 import function.session;
 import struct.book;
+import struct.reading;
 
 public class rotation_panel extends JPanel {
 	private String myBookCoverPath;
@@ -107,7 +108,127 @@ public class rotation_panel extends JPanel {
 			books.setText("책 : " + nowBooks);
 		}
 	}
-	
+		
+	public class my_reading extends JPanel {
+		private now_reading now_reading_pane;
+		private next_book next_book_pane;
+		public my_reading() {
+			setBounds(420, 40, 470, 570);
+			
+			JLabel title = new JLabel("현재 읽는 책");
+			//title.setBounds(10, 10, 330, 40);
+			
+			now_reading_pane = new now_reading();
+			next_book_pane = new next_book();
+			
+			add(title);
+			add(now_reading_pane);
+			add(next_book_pane);
+		}
+		
+		public class now_reading extends JPanel {
+			private JLabel cover = new JLabel();
+			private JLabel title = new JLabel();
+			private JLabel author = new JLabel();
+			private JLabel genre = new JLabel();
+			private JLabel owner = new JLabel();
+			public now_reading() {
+				setPreferredSize(new Dimension(470, 340));
+								
+				String drt = "독서기간 : ";
+				String next = "전달 멤버 : ";
+				
+				if(session.now_reading != null) {
+					drt += session.now_reading.getStart().toString() + " ~ " + session.now_reading.getEnd().toString();
+					if(session.now_reading.getEnd() == session.now_team.get_end()) 
+						next += "-";
+					 else 
+						next += session.now_team.getNextMember(session.login_member.getNum());
+				} else {
+					drt += "-";
+					next += "-";
+				}
+				
+				JLabel duration = new JLabel(drt);
+				JLabel nextMember = new JLabel(next);
+				
+				setInfo();
+				
+				add(cover);
+				add(title); add(author); add(genre); add(owner);
+				add(duration); add(nextMember);
+			}
+			
+			public void setInfo() {
+				String s_title = "";
+				String s_author = "";
+				String s_genre = "";
+				String s_owner = "";
+				ImageIcon icon = bookCover.getIcon();
+								
+				if(session.now_reading != null && session.now_reading.getBook().getID() != null) {
+					book now = session.now_reading.getBook();
+					s_title = now.getTitle();
+					s_author = (now.getAuthor() == null ? "" : now.getAuthor());
+					s_genre = (now.getGenre() == null ? "" : now.getGenre());
+					s_owner = now.getOwnerName();
+					
+					if(now.getCover() != null)
+						icon = bookCover.getIcon(now.getCover());
+				}
+				
+				cover.setIcon(icon);
+				title.setText(s_title);
+				author.setText(s_author);
+				genre.setText(s_genre);
+				owner.setText("소장 : " + s_owner);
+			}
+		}
+		
+		public class next_book extends JPanel {
+			private JLabel nextCover = new JLabel();
+			private JLabel nextTitle = new JLabel();
+			private JLabel nextDuration = new JLabel();
+			public next_book() {
+				setPreferredSize(new Dimension (470, 180));
+				setBackground(Color.lightGray);
+				
+				setInfo();
+				JLabel la = new JLabel("다음에 읽게될 책");
+				add(la);
+				add(nextCover); add(nextTitle); add(nextDuration);
+			}
+			
+			public void setInfo() {
+				String s_title = "";
+				String s_duration = "";
+				ImageIcon icon = bookCover.getIcon(70, 100);
+				
+				if(session.now_reading != null && session.now_reading.getNext() != null) {
+					reading next = session.now_reading.getNext();
+					
+					if(next != null) {
+						s_duration += (next.getStart() + " ~ " + next.getEnd());
+						if(next.getBook().getID() != null) {
+							s_title = next.getBook().getTitle();
+							icon = bookCover.getIcon(next.getBook().getCover(), 70, 100);
+						}
+					}
+				}
+				
+				nextCover.setIcon(icon);
+				nextTitle.setText(s_title);
+				nextDuration.setText("기간 : " + s_duration);
+			}
+
+		}
+		
+		public void refresh() {
+			now_reading_pane.setInfo();
+			next_book_pane.setInfo();
+		}
+	}
+			
 	public class BookEnroll extends JDialog {
 		public BookEnroll(JFrame parent) {
 			super(parent, "책 정보", true);
@@ -171,6 +292,7 @@ public class rotation_panel extends JPanel {
 					dispose();
 					initSession();
 					now_rotation_pane.setInfo();
+					my_reading_pane.refresh();
 				}
 				
 			});
@@ -182,116 +304,6 @@ public class rotation_panel extends JPanel {
 			});
 			
 			add(btn1); add(btn2);
-		}
-	}
-	
-	public class my_reading extends JPanel {
-		private now_reading now_reading_pane;
-		public my_reading() {
-			setBounds(420, 40, 470, 570);
-			
-			JLabel title = new JLabel("현재 읽는 책");
-			//title.setBounds(10, 10, 330, 40);
-			
-			now_reading_pane = new now_reading();
-			
-			add(title);
-			add(now_reading_pane);
-		}
-		
-		public class now_reading extends JPanel {
-			private JLabel cover = new JLabel();
-			private JLabel title = new JLabel();
-			private JLabel author = new JLabel();
-			private JLabel genre = new JLabel();
-			private JLabel owner = new JLabel();
-			public now_reading() {
-				setPreferredSize(new Dimension(470, 340));
-								
-				String drt = "독서기간 : ";
-				String next = "전달 멤버 : ";
-				
-				if(session.now_reading != null) {
-					drt += session.now_reading.getStart().toString() + " ~ " + session.now_reading.getEnd().toString();
-					if(session.now_reading.getEnd() == session.now_team.get_end()) 
-						next += "-";
-					 else 
-						next += session.now_team.getNextMember(session.login_member.getNum());
-				} else {
-					drt += "-";
-					next += "-";
-				}
-				
-				JLabel duration = new JLabel(drt);
-				JLabel nextMember = new JLabel(next);
-				
-				setInfo();
-				
-				add(cover);
-				add(title); add(author); add(genre); add(owner);
-				add(duration); add(nextMember);
-			}
-			
-			public void setInfo() {
-				String s_title = "";
-				String s_author = "";
-				String s_genre = "";
-				String s_owner = "";
-				ImageIcon icon = bookCover.getIcon();
-								
-				if(session.now_reading != null && session.now_reading.getBook().getID() != null) {
-					book now = session.now_reading.getBook();
-					s_title = now.getTitle();
-					s_author = (now.getAuthor() == null ? "" : now.getAuthor());
-					s_genre = (now.getGenre() == null ? "" : now.getGenre());
-					s_owner = now.getOwnerName();
-					
-					if(now.getCover() != null)
-						icon = bookCover.getIcon(now.getCover()); 
-				}
-				
-				cover.setIcon(icon);
-				title.setText(s_title);
-				author.setText(s_author);
-				genre.setText(s_genre);
-				owner.setText("소장 : " + s_owner);
-			}
-		}
-		
-		public class next_book extends JPanel {
-			private JLabel nextCover;
-			private JLabel nextTitle = new JLabel();
-			private JLabel nextAuthor = new JLabel();
-			private JLabel nextGenre = new JLabel();
-			public next_book() {
-				setSize(470, 120);
-				
-				add(nextCover); add(nextTitle); add(nextAuthor); add(nextGenre);
-			}
-			
-		}
-		
-		
-		public void setInfo() {
-			String str_title = "-";
-			String str_author = "-";
-			String str_owner = "-";
-			String str_nextT = "-";
-			String str_nextA = "";
-			String str_nextG = "";
-			
-			if(session.now_reading.getBook().getID() != null) {
-				str_title = session.now_reading.getBook().getTitle();
-				str_author = session.now_reading.getBook().getAuthor();
-				//str_owner = session.now_reading.getBook().get
-			}
-			
-			//cover= ;
-			//nextCover;
-//			
-//			nextTitle.setText("");
-//			nextAuthor.setText("");
-//			nextGenre.setText("");
 		}
 	}
 	

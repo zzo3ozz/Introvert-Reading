@@ -36,4 +36,8 @@ public class reading {
 	public book getBook() {
 		return this.now_book;
 	}
+	
+	public reading getNext() {
+		return this.next_reading;
+	}
 }
