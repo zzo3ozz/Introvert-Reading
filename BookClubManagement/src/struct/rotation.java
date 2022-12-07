@@ -22,9 +22,9 @@ public class rotation {
 		for(int i = 0; i < this.teams.size(); i++) {
 			String[] line = new String[5];
 			line[0] = Integer.toString(this.id);
-			line[1] = this.startDate.toString();
-			line[2] = this.endDate.toString();
-			line[3] = Integer.toString(this.teams.get(i).get_id());
+			line[1] = Integer.toString(this.teams.get(i).get_id());
+			line[2] = this.startDate.toString();
+			line[3] = this.endDate.toString();
 			ArrayList<member> mem = this.teams.get(i).get_members();
 			String mem_list = "";
 			for(int j = 0; j < mem.size(); j++) {

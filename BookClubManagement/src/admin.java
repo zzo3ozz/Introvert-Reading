@@ -146,7 +146,7 @@ public class admin extends JPanel {
 			pan.setBounds(50, 80, 830, 520);
 			pan.setLayout(null);
 
-			String header[] = {"로테이션 회차", "로테이션 시작일", "로테이션 종료일", "팀 구분", "구성 멤버"};
+			String header[] = {"로테이션 회차", "팀 구분", "로테이션 시작일", "로테이션 종료일", "구성 멤버"};
 			DefaultTableModel model = new DefaultTableModel(header, 0) {
 				public boolean isCellEditable(int rowIndex, int ColIndex) {
 					return false;
@@ -157,9 +157,9 @@ public class admin extends JPanel {
 			r_list.setSize(830, 520);
 			r_list.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 			r_list.getColumn("로테이션 회차").setPreferredWidth(90);
+			r_list.getColumn("팀 구분").setPreferredWidth(70);
 			r_list.getColumn("로테이션 시작일").setPreferredWidth(150);
 			r_list.getColumn("로테이션 종료일").setPreferredWidth(150);
-			r_list.getColumn("팀 구분").setPreferredWidth(70);
 			r_list.getColumn("구성 멤버").setPreferredWidth(277);
 			r_list.getTableHeader().setReorderingAllowed(false);
 			r_list.getTableHeader().setResizingAllowed(false);
@@ -169,7 +169,6 @@ public class admin extends JPanel {
 			
 			if(rt_num != 0) {
 				ArrayList<String[]> strs = new ArrayList<String[]>();
-				ArrayList<String[]> test = rt.get(0).getColumn();
 	
 				for(int i = 0; i < rt_num; i++) {
 					strs.addAll(rt.get(i).getColumn());
