@@ -21,17 +21,17 @@ public class book {
 		this.id = id;
 		this.title = title;
 		
-		if(author.equals(""))
+		if(author != null && author.equals(""))
 			this.author = null;
 		else
 			this.author = author;
 		
-		if(cover.equals(""))
+		if(cover != null && cover.equals(""))
 			this.cover = null;
 		else
 			this.cover = cover;
 		
-		if(genre.equals(""))
+		if(genre != null && genre.equals(""))
 			this.genre = null;
 		else
 			this.genre = genre;
@@ -43,17 +43,17 @@ public class book {
 		this.owner = owner;
 		this.owner_name = owner_name;
 		
-		if(author.equals(""))
+		if(author != null && author.equals(""))
 			this.author = null;
 		else
 			this.author = author;
 		
-		if(cover.equals(""))
+		if(cover != null && cover.equals(""))
 			this.cover = null;
 		else
 			this.cover = cover;
 		
-		if(genre.equals(""))
+		if(genre != null && genre.equals(""))
 			this.genre = null;
 		else
 			this.genre = genre;
@@ -69,17 +69,17 @@ public class book {
 		this.owner = owner;
 		this.owner_name = owner_name;
 		
-		if(author.equals(""))
+		if(author != null && author.equals(""))
 			this.author = null;
 		else
 			this.author = author;
 		
-		if(cover.equals(""))
+		if(cover != null && cover.equals(""))
 			this.cover = null;
 		else
 			this.cover = cover;
 		
-		if(genre.equals(""))
+		if(genre != null && genre.equals(""))
 			this.genre = null;
 		else
 			this.genre = genre;

@@ -60,7 +60,8 @@ public class rotation_panel extends JPanel {
 			
 			JLabel title = new JLabel("현재 로테이션 정보");
 			//title.setBounds(10, 10, 330, 40);
-			
+			JLabel mybook = new JLabel("나의 로테이션 책");
+			JLabel laBooks = new JLabel("로테이션 책");
 			JButton btn = new JButton("등록 / 수정");
 			btn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -73,9 +74,10 @@ public class rotation_panel extends JPanel {
 			setInfo();
 			
 			add(title);
+			add(mybook);
 			add(cover);
 			add(btn);
-			add(r_num); add(date); add(members); add(books);
+			add(r_num); add(date); add(members); add(laBooks); add(books);
 		}
 				
 		public void setInfo() {
@@ -105,7 +107,7 @@ public class rotation_panel extends JPanel {
 			r_num.setText("회차 : " + nowRNum);
 			date.setText("기간 : " + nowStart + " ~ " + nowEnd);
 			members.setText("멤버 : " + nowMembers);
-			books.setText("책 : " + nowBooks);
+			books.setText(nowBooks);
 		}
 	}
 		
@@ -188,6 +190,7 @@ public class rotation_panel extends JPanel {
 		public class next_book extends JPanel {
 			private JLabel nextCover = new JLabel();
 			private JLabel nextTitle = new JLabel();
+			private JLabel nextAuthor = new JLabel();
 			private JLabel nextDuration = new JLabel();
 			public next_book() {
 				setPreferredSize(new Dimension (470, 180));
@@ -196,11 +199,12 @@ public class rotation_panel extends JPanel {
 				setInfo();
 				JLabel la = new JLabel("다음에 읽게될 책");
 				add(la);
-				add(nextCover); add(nextTitle); add(nextDuration);
+				add(nextCover); add(nextTitle); add(nextAuthor); add(nextDuration);
 			}
 			
 			public void setInfo() {
 				String s_title = "";
+				String s_author ="";
 				String s_duration = "";
 				ImageIcon icon = bookCover.getIcon(70, 100);
 				
@@ -211,6 +215,7 @@ public class rotation_panel extends JPanel {
 						s_duration += (next.getStart() + " ~ " + next.getEnd());
 						if(next.getBook().getID() != null) {
 							s_title = next.getBook().getTitle();
+							s_author = next.getBook().getAuthor();
 							icon = bookCover.getIcon(next.getBook().getCover(), 70, 100);
 						}
 					}
@@ -218,6 +223,7 @@ public class rotation_panel extends JPanel {
 				
 				nextCover.setIcon(icon);
 				nextTitle.setText(s_title);
+				nextAuthor.setText(s_author);
 				nextDuration.setText("기간 : " + s_duration);
 			}
 
@@ -282,31 +288,35 @@ public class rotation_panel extends JPanel {
 					String message = "ISBN과 제목은 필수 입력 값입니다.";
 					
 					if(isbn.length() != 13 || title.equals("")) {
-						isbnField.requestFocus();
-						if(!str.equals("")) {
-							message = "ISBN 값을 잘못 입력하셨습니다. ISBN은 13자리의 숫자입니다.";
-						} else {
-							if(title.equals(""))
-								titleField.requestFocus();
+						if(title.equals(""))
+							titleField.requestFocus();
+						
+						if(isbn.length() != 13) {
+							isbnField.requestFocus();
+							if(!str.equals(""))
+								message = "ISBN 값을 잘못 입력하셨습니다. ISBN은 13자리의 숫자입니다.";
 						}
 						JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(), message);
 						return;
-					}
-					
-					if(!book_f.isNew(myBook)) {
-						message = "이미 등록된 도서입니다.";
 					}
 					
 					book newBook = new book(isbn,
 							titleField.getText(), authorField.getText(),
 							pathField.getText(), genreField.getText());
 					if(myBook.getID() == null) {
+						if(!book_f.isNew(myBook)) {
+							message = "이미 등록된 도서입니다. 다른 도서를 등록하세요.";
+							isbnField.requestFocus();
+							JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(), message);
+							return;
+						}
 						book_f.enrollBook(session.now_team.get_r(), session.login_member.getNum(), newBook);
 					} else {
 						String before_isbn = myBook.getID();
 						myBook = newBook;
 						book_f.updateBook(before_isbn, newBook);
 					}
+					JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(), "등록되었습니다.");
 					dispose();
 					initSession();
 					now_rotation_pane.setInfo();

@@ -12,15 +12,15 @@ public class book_f {
 	public static boolean isNew(book newBook) {
 		Connection con = DBConnect.makeConnection();
 		PreparedStatement pstmt = null;
-		Boolean result = false;
+		Boolean result = true;
 		try {
 			String check = "select 1 from book where isbn=?";
 			pstmt = con.prepareStatement(check);
 			pstmt.setString(1, newBook.getID());
 			ResultSet rs = pstmt.executeQuery();
 			
-			if(!rs.next()) {
-				result = true; 
+			if(rs.next()) {
+				result = false; 
 			}
 			
 			rs.close();
@@ -35,9 +35,6 @@ public class book_f {
 	}
 	
 	public static int enrollBook(int r_num, int m_num, book newBook) {
-		if(!isNew(newBook))
-			return EXIST;
-		
 		Connection con = DBConnect.makeConnection();
 		PreparedStatement pstmt = null;
 		int result = FAIL;
@@ -54,9 +51,11 @@ public class book_f {
 			pstmt.setInt(6, m_num);
 			pstmt.executeUpdate();
 			
-			String update = "update tmember set isbn=?";
+			String update = "update tmember set isbn=? where m_num=? and r_num=?";
 			pstmt = con.prepareStatement(update);
 			pstmt.setString(1, newBook.getID());
+			pstmt.setInt(2, m_num);
+			pstmt.setInt(3, r_num);
 			pstmt.executeUpdate();
 			
 			String update2 = "update reading set isbn=? where r_num=? and b_owner=?";

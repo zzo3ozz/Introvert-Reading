@@ -21,11 +21,13 @@ public class bookCover {
 		ImageIcon icon = new ImageIcon("images/default.png");
 		Image temp_img = icon.getImage();
 		
-		try {
-			URL url = new URL(path);
-			temp_img = ImageIO.read(url);
-		} catch (IOException e) {
-			e.printStackTrace();
+		if(path != null) {
+			try {
+				URL url = new URL(path);
+				temp_img = ImageIO.read(url);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		temp_img = temp_img.getScaledInstance(140, 200, Image.SCALE_SMOOTH);
@@ -47,11 +49,13 @@ public class bookCover {
 		ImageIcon icon = new ImageIcon("images/default.png");
 		Image temp_img = icon.getImage();
 		
-		try {
-			URL url = new URL(path);
-			temp_img = ImageIO.read(url);
-		} catch (IOException e) {
-			e.printStackTrace();
+		if(path != null) {
+			try {
+				URL url = new URL(path);
+				temp_img = ImageIO.read(url);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		temp_img = temp_img.getScaledInstance(x, y, Image.SCALE_SMOOTH);

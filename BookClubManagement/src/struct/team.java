@@ -66,7 +66,7 @@ public class team {
 	}
 	
 	public String getBookByString() {
-		String result = "";
+		String result = "<html>";
 		
 		for(int i = 0; i < this.books.size(); i++) {
 			if(books.get(i).getID() == null)
@@ -76,10 +76,11 @@ public class team {
 				result += books.get(i).getTitle();
 				result += "」";
 			}
-			result += ", ";
+			result += ",<br>";
 		}
-		result = result.substring(0, result.length() - 2);
-		
+		result = result.substring(0, result.length() - 5);
+		result += "</html>";
+		System.out.println(result);
 		return result;
 	}
 
