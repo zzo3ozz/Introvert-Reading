@@ -275,11 +275,29 @@ public class rotation_panel extends JPanel {
 			JButton btn1 = new JButton("등록 / 수정");
 			btn1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//isbn or 제목 미 입력시 오류 메세지 추가
+					//isbn or 제목 미 입력시 오류 메세지 추가, 중복 검
 					String str = isbnField.getText();
-					String restr = str.replaceAll("[^0-9]", "");
+					String isbn = str.replaceAll("[^0-9]", "");
+					String title = titleField.getText();
+					String message = "ISBN과 제목은 필수 입력 값입니다.";
 					
-					book newBook = new book(restr,
+					if(isbn.length() != 13 || title.equals("")) {
+						isbnField.requestFocus();
+						if(!str.equals("")) {
+							message = "ISBN 값을 잘못 입력하셨습니다. ISBN은 13자리의 숫자입니다.";
+						} else {
+							if(title.equals(""))
+								titleField.requestFocus();
+						}
+						JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(), message);
+						return;
+					}
+					
+					if(!book_f.isNew(myBook)) {
+						message = "이미 등록된 도서입니다.";
+					}
+					
+					book newBook = new book(isbn,
 							titleField.getText(), authorField.getText(),
 							pathField.getText(), genreField.getText());
 					if(myBook.getID() == null) {
