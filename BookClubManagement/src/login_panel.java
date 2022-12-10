@@ -54,6 +54,8 @@ public class login_panel extends JPanel{
 				
 				if(state == login.SUCCESS) {
 					setVisible(false);
+					session.now_team = rotation_f.getNowTeam(session.login_member.getNum());
+					session.now_reading = rotation_f.getNowReading(session.now_team.get_r(), session.login_member.getNum());
 				} else if(state == login.IDERROR) {
 					idField.requestFocus();
 					error.setText("등록된 아이디가 없습니다.");
