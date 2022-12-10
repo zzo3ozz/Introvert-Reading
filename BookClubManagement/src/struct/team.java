@@ -49,6 +49,10 @@ public class team {
 		return this.members;
 	}
 	
+	public ArrayList<book> getBooks() {
+		return this.books;
+	}
+	
 	public HashMap<Integer, book> get_map() {
 		return this.map;
 	}

@@ -320,7 +320,7 @@ public class rotation_f {
 	// 현재 내가 참여하고 있는 팀 정보 가져오기
 	public static team getNowTeam(int num) {
 		team now_team = null;
-		LocalDate now_date = LocalDate.of(2022, 2, 9);//LocalDate.now();
+		LocalDate now_date = LocalDate.of(2022, 5, 9);//LocalDate.now();
 		
 		Connection con = DBConnect.makeConnection();
 		PreparedStatement pstmt = null;
@@ -395,7 +395,7 @@ public class rotation_f {
 	// 현재 나의 독서정보 가져오기
 	public static reading getNowReading(int r_num, int m_num) {
 		reading result = null;
-		LocalDate now_date = LocalDate.of(2022, 2, 9);//LocalDate.now();
+		LocalDate now_date = LocalDate.of(2022, 5, 9);//LocalDate.now();
 		
 		Connection con = DBConnect.makeConnection();
 		PreparedStatement pstmt = null;
@@ -604,25 +604,5 @@ public class rotation_f {
 
 		return list;
 	}
-	
-//	public static void main(String[] args) {
-//		ArrayList<rotation> rotations = rotation_f.getAllRotation();
-//		System.out.println(rotations.size());
-//		for(int i = 0; i < rotations.size(); i++) {
-//			int r_id = rotations.get(i).id;
-//			System.out.println(rotations.get(i).teams.size());
-//			for(int j = 0; j < rotations.get(i).teams.size(); j++) {
-//				int t_id = rotations.get(i).teams.get(j).t_id;
-//				System.out.println(rotations.get(i).teams.get(j).members.size());
-//				for(int k = 0; k < rotations.get(i).teams.get(j).members.size(); k++) {
-//					int m_num = rotations.get(i).teams.get(j).members.get(k).num;
-//					String m_name = rotations.get(i).teams.get(j).members.get(k).name;
-//					
-//					System.out.print(r_id + " " + t_id + " " + m_num + " " + m_name + " " + rotations.get(i).startDate + " " + rotations.get(i).endDate + "\n");
-//				}
-//			}
-//			
-//		}
-//		
-//	}
+
 }

@@ -96,14 +96,12 @@ public class mypage extends JPanel {
 			r_list.getTableHeader().setReorderingAllowed(false);
 			r_list.getTableHeader().setResizingAllowed(false);
 
-
 			ArrayList<String> myRL = rotation_f.getMyRotation(session.login_member.getNum());
 			for(int i = 0; i < myRL.size(); i++) {
 				String[] line = myRL.get(i).split("/");
 				model.addRow(line);
 			}
 
-			
 			JScrollPane list = new JScrollPane(r_list);
 			list.setPreferredSize(new Dimension(830, 520));
 			list.setSize(830, 520);

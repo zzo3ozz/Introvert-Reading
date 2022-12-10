@@ -10,7 +10,7 @@ public class Main extends JFrame {
 	public static login_panel login_pane = new login_panel();
 	public static menu menu_pane = null;
 	public static rotation_panel rotation_pane = null;
-	//public static book_list book_pane = null;
+	public static book_list book_pane = null;
 	public static mypage mypage_pane = null;
 	public static admin admin_pane = null;
 	
@@ -49,8 +49,8 @@ public class Main extends JFrame {
 				c.add(rotation_pane);
 				c.repaint();
 			} else if(menu_pane.selected == 1) {
-				//book_pane = new book_list();
-				//c.add(book_pane);
+				book_pane = new book_list();
+				c.add(book_pane);
 				c.repaint();
 			} else if(menu_pane.selected == 2) {
 				mypage_pane = new mypage();
