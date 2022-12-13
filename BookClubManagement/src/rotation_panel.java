@@ -392,7 +392,7 @@ public class rotation_panel extends JPanel {
 					
 					String path = pathField.getText();
 					int len = path.length();
-					if(len != 0 && (path.substring(len - 3, len).equals(".jpg") || path.substring(len - 3, len).equals(".png"))) {
+					if(len != 0 && (!path.substring(len - 4, len).equals(".jpg") &&  !path.substring(len - 4, len).equals(".png"))) {
 						pop.showMessageDialog(((JButton)e.getSource()).getParent(), "jpg 혹은 png 확장자만 등록 가능합니다.");
 						pathField.requestFocus();
 						return;
