@@ -1,14 +1,15 @@
 package function;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import struct.book;
 
 public class book_f {
-	final static int EXIST = 0;
-	final static int FAIL = 1;
-	final static int SUCCESS = 2;
+	public final static int EXIST = 0;
+	public final static int FAIL = 1;
+	public final static int SUCCESS = 2;
 	
 	public static boolean isNew(book newBook) {
 		Connection con = DBConnect.makeConnection();
@@ -141,15 +142,16 @@ public class book_f {
 
 	public static ArrayList<String> getMyReadings(int m_num) {
 		ArrayList<String> result = new ArrayList<String>();
-		
 		Connection con = DBConnect.makeConnection();
 		PreparedStatement pstmt = null;
+		LocalDate now_date = LocalDate.now(); 
 		
 		try {
 			String sql = "select r_num, isbn, title, author, genre, read_start, read_end, owner_name from allreading "
-					+ "where m_num=?";
+					+ "where m_num=? && read_end < ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, m_num);
+			pstmt.setDate(2, java.sql.Date.valueOf(now_date));
 			
 			ResultSet rs = pstmt.executeQuery();
 			
