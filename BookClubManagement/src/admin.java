@@ -95,9 +95,17 @@ public class admin extends JPanel {
 					
 					int result = 0;
 					
-					if(temp_start == null && temp_end == null) 
+					if(temp_start == null && temp_end == null) {
 						result = rotation_f.setRotation();
-					else if (temp_start == null) {
+						if(result == rotation_f.SUCCESS) {
+							JOptionPane pop = new JOptionPane();
+							pop.setBackground(Colors.base);
+							pop.setFont(Fonts.setFont(13));
+							pop.showMessageDialog(Main.c, "등록 성공");
+							backBtn.doClick();
+						} else
+							la3.setText("저장 실패");
+					} else if (temp_start == null) {
 						la3.setText("시작일을 입력하세요.");
 						la3.setForeground(Color.RED);
 					} else if (temp_end == null) {  
@@ -108,7 +116,6 @@ public class admin extends JPanel {
 						LocalDate end = new java.sql.Date(temp_end.getTime()).toLocalDate();
 						
 						result = rotation_f.setRotation(start, end);
-						String message = "";
 						
 						if(result == rotation_f.SUCCESS) {
 							JOptionPane pop = new JOptionPane();
@@ -124,9 +131,6 @@ public class admin extends JPanel {
 							la3.setText("시작일과 종료일은 최소 4일 이상 차이가 나야 합니다.");
 						else
 							la3.setText("저장 실패");
-
-						la3.setText("<html><p style='text-align:center; font-family: \"Gabia Maeumgyeol\";'>시작일, 종료일을 모두 지정하지 않는 경우<br>자동 설정 됩니다.</p></html>");
-						la3.setForeground(Colors.base);
 					}
 				}
 			});
@@ -231,7 +235,6 @@ public class admin extends JPanel {
 			add(content);
 		}
 	}
-	
 
 }
 
