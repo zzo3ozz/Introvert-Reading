@@ -320,7 +320,7 @@ public class rotation_f {
 	// 현재 내가 참여하고 있는 팀 정보 가져오기
 	public static team getNowTeam(int num) {
 		team now_team = null;
-		LocalDate now_date = LocalDate.of(2022, 5, 9);//LocalDate.now();
+		LocalDate now_date = LocalDate.now();
 		
 		Connection con = DBConnect.makeConnection();
 		PreparedStatement pstmt = null;
@@ -395,7 +395,7 @@ public class rotation_f {
 	// 현재 나의 독서정보 가져오기
 	public static reading getNowReading(int r_num, int m_num) {
 		reading result = null;
-		LocalDate now_date = LocalDate.of(2022, 5, 9);//LocalDate.now();
+		LocalDate now_date = LocalDate.now();
 		
 		Connection con = DBConnect.makeConnection();
 		PreparedStatement pstmt = null;
