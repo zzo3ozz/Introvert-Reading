@@ -391,9 +391,16 @@ public class rotation_panel extends JPanel {
 						return;
 					}
 					
+					String path = pathField.getText();
+					int len = path.length();
+					if(len != 0 && (path.substring(len - 3, len).equals(".jpg") || path.substring(len - 3, len).equals(".png"))) {
+						pop.showMessageDialog(((JButton)e.getSource()).getParent(), "jpg 혹은 png 확장자만 등록 가능합니다.");
+						return;
+					}
+					
 					book newBook = new book(isbn,
 							titleField.getText(), authorField.getText(),
-							pathField.getText(), genreField.getText());
+							path, genreField.getText());
 					if(myBook.getID() == null) {
 						if(!book_f.isNew(myBook)) {
 							message = "이미 등록된 도서입니다. 다른 도서를 등록하세요.";
@@ -407,6 +414,7 @@ public class rotation_panel extends JPanel {
 						myBook = newBook;
 						book_f.updateBook(before_isbn, newBook);
 					}
+					
 					pop.showMessageDialog(((JButton)e.getSource()).getParent(), "등록되었습니다.");
 					dispose();
 					initSession();
