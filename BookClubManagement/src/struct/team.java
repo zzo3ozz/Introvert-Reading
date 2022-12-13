@@ -73,13 +73,13 @@ public class team {
 		String result = "<html><style> p {font-family: 'Gabia Maeumgyeol'; padding-bottom: 7px;}</style>";
 		
 		for(int i = 0; i < this.books.size(); i++) {
+			result += "<p>「";
 			if(books.get(i).getID() == null)
 				result += "-";
 			else {
-				result += "<p>「";
 				result += books.get(i).getTitle();
-				result += "」";
 			}
+			result += "」";
 			result += ",</p>";
 		}
 		result = result.substring(0, result.length() - 5);
