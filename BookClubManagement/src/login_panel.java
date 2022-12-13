@@ -26,7 +26,7 @@ public class login_panel extends JPanel{
 		
 		JLabel pwLa = new JLabel("PW");
 		pwLa.setBounds(30, 290, 35, 20); pwLa.setFont(Fonts.setFont(15, 1)); pwLa.setForeground(Colors.base);
-		pwField = new JPasswordField();
+		pwField = new JPasswordField("");
 		pwField.setBorder(null);
 		pwField.setBounds(70, 290, 200, 20);
 		
@@ -71,6 +71,9 @@ public class login_panel extends JPanel{
 					int state = login.tryLogin(id, pw);
 					
 					if(state == login.SUCCESS) {
+						idField.setText("");
+						pwField.setText("");
+						error.setText("");
 						Main.login_pane.setVisible(false);
 						session.now_team = rotation_f.getNowTeam(session.login_member.getNum());
 						session.now_reading = rotation_f.getNowReading(session.now_team.get_r(), session.login_member.getNum());
