@@ -35,7 +35,6 @@ public class admin extends JPanel {
 					for(int i = 0; i < MENU_NUM; i++) {
 						if(btn.equals(btn_list[i])) {
 							selected = i;
-							System.out.println(selected);
 						}
 					}
 					Main.admin_pane.setVisible(false);
@@ -101,7 +100,7 @@ public class admin extends JPanel {
 							JOptionPane pop = new JOptionPane();
 							pop.setBackground(Colors.base);
 							pop.setFont(Fonts.setFont(13));
-							pop.showMessageDialog(Main.c, "등록 성공");
+							pop.showMessageDialog(Main.c, "등록되었습니다.");
 							backBtn.doClick();
 						} else
 							la3.setText("저장 실패");
@@ -122,7 +121,7 @@ public class admin extends JPanel {
 							pop.setBackground(Colors.base);
 							UIManager.put("OptionPane.messageFont", Fonts.setFont(13));
 							UIManager.put("OptionPane.buttonFont", Fonts.setFont(13));
-							pop.showMessageDialog(Main.c, "등록 성공");
+							pop.showMessageDialog(Main.c, "등록되었습니다.");
 							backBtn.doClick();
 						} else if (result == rotation_f.BEFORE_START)
 							la3.setText("종료일은 시작일을 앞설 수 없습니다.");
