@@ -394,6 +394,7 @@ public class rotation_panel extends JPanel {
 					int len = path.length();
 					if(len != 0 && (path.substring(len - 3, len).equals(".jpg") || path.substring(len - 3, len).equals(".png"))) {
 						pop.showMessageDialog(((JButton)e.getSource()).getParent(), "jpg 혹은 png 확장자만 등록 가능합니다.");
+						pathField.requestFocus();
 						return;
 					}
 					
@@ -405,14 +406,19 @@ public class rotation_panel extends JPanel {
 							pop.showMessageDialog(((JButton)e.getSource()).getParent(), message);
 							return;
 						}
-						book_f.enrollBook(session.now_team.get_r(), session.login_member.getNum(), newBook);
+						int result = book_f.enrollBook(session.now_team.get_r(), session.login_member.getNum(), newBook);
+						if(result == book_f.SUCCESS)
+							message = "등록되었습니다.";
+						else
+							message = "등록 실패하였습니다.";
 					} else {
 						String before_isbn = myBook.getID();
 						myBook = newBook;
 						book_f.updateBook(before_isbn, newBook);
+						message = "수정되었습니다.";
 					}
 					
-					pop.showMessageDialog(((JButton)e.getSource()).getParent(), "등록되었습니다.");
+					pop.showMessageDialog(((JButton)e.getSource()).getParent(), message);
 					dispose();
 					initSession();
 					now_rotation_pane.setInfo();
