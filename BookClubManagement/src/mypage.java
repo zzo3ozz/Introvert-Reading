@@ -72,7 +72,7 @@ public class mypage extends JPanel {
 			content.setBounds(70, 0, 930, 650);
 			content.setLayout(null);
 			
-			JLabel la = new JLabel("참여한 로테이션 목록");
+			JLabel la = new JLabel("참여 로테이션 목록");
 			la.setBounds(50, 30, 300, 30);
 			la.setFont(Fonts.setFont(24, 1)); la.setForeground(Colors.base);
 			
