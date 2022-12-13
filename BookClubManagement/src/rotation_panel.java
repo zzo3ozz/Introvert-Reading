@@ -383,7 +383,10 @@ public class rotation_panel extends JPanel {
 							if(!str.equals(""))
 								message = "ISBN 값을 잘못 입력하셨습니다. ISBN은 13자리의 숫자입니다.";
 						}
-						JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(), message);
+						JOptionPane pop = new JOptionPane();
+						pop.setBackground(Colors.base);
+						pop.setFont(Fonts.setFont(13));
+						pop.showMessageDialog(((JButton)e.getSource()).getParent(), message);
 						return;
 					}
 					
