@@ -373,6 +373,10 @@ public class rotation_panel extends JPanel {
 					String isbn = str.replaceAll("[^0-9]", "");
 					String title = titleField.getText();
 					String message = "ISBN과 제목은 필수 입력 값입니다.";
+					JOptionPane pop = new JOptionPane();
+					pop.setBackground(Colors.base);
+					UIManager.put("OptionPane.messageFont", Fonts.setFont(13));
+					UIManager.put("OptionPane.buttonFont", Fonts.setFont(13));
 					
 					if(isbn.length() != 13 || title.equals("")) {
 						if(title.equals(""))
@@ -383,9 +387,6 @@ public class rotation_panel extends JPanel {
 							if(!str.equals(""))
 								message = "ISBN 값을 잘못 입력하셨습니다. ISBN은 13자리의 숫자입니다.";
 						}
-						JOptionPane pop = new JOptionPane();
-						pop.setBackground(Colors.base);
-						pop.setFont(Fonts.setFont(13));
 						pop.showMessageDialog(((JButton)e.getSource()).getParent(), message);
 						return;
 					}
@@ -397,7 +398,7 @@ public class rotation_panel extends JPanel {
 						if(!book_f.isNew(myBook)) {
 							message = "이미 등록된 도서입니다. 다른 도서를 등록하세요.";
 							isbnField.requestFocus();
-							JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(), message);
+							pop.showMessageDialog(((JButton)e.getSource()).getParent(), message);
 							return;
 						}
 						book_f.enrollBook(session.now_team.get_r(), session.login_member.getNum(), newBook);
@@ -406,7 +407,7 @@ public class rotation_panel extends JPanel {
 						myBook = newBook;
 						book_f.updateBook(before_isbn, newBook);
 					}
-					JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(), "등록되었습니다.");
+					pop.showMessageDialog(((JButton)e.getSource()).getParent(), "등록되었습니다.");
 					dispose();
 					initSession();
 					now_rotation_pane.setInfo();

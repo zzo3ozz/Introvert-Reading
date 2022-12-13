@@ -120,7 +120,8 @@ public class admin extends JPanel {
 						if(result == rotation_f.SUCCESS) {
 							JOptionPane pop = new JOptionPane();
 							pop.setBackground(Colors.base);
-							pop.setFont(Fonts.setFont(13));
+							UIManager.put("OptionPane.messageFont", Fonts.setFont(13));
+							UIManager.put("OptionPane.buttonFont", Fonts.setFont(13));
 							pop.showMessageDialog(Main.c, "등록 성공");
 							backBtn.doClick();
 						} else if (result == rotation_f.BEFORE_START)
