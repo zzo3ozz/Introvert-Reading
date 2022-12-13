@@ -137,7 +137,6 @@ public class rotation_f {
 		if(ChronoUnit.DAYS.between(start, end) < 3)
 			return DURATION_ERROR;
 		
-		
 		Connection con = DBConnect.makeConnection();
 		PreparedStatement pstmt = null;
 		PreparedStatement pstmt1 = null;
@@ -158,9 +157,9 @@ public class rotation_f {
 			} else {
 				r_date = start;
 			}
-			
+
 			// 마지막 회차 로테이션 종료일보다 새로 설정한 시작일이 앞서면 false
-			if(start.isBefore(r_date))
+			if(start.equals(r_date) || start.isBefore(r_date))
 				return BEFORE_END;
 			
 			
