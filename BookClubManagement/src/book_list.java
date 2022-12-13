@@ -374,7 +374,7 @@ public class book_list extends JPanel {
 			
 			for(int i = 0; i < btn.length; i++) {
 				String path = books.get(i).getCover();
-				ImageIcon icon = bookCover.getIcon(path);
+				ImageIcon icon = bookCover.getIcon(path, 119, 170);
 				btn[i] = new JButton(icon);
 				btn[i].setPreferredSize(new Dimension(119, 170));
 				btn[i].addActionListener(new ActionListener() {
