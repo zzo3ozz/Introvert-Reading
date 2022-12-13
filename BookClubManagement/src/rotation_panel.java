@@ -368,7 +368,6 @@ public class rotation_panel extends JPanel {
 			SmallButton btn1 = new SmallButton("등록 / 수정"); btn1.setBounds(90, 405, 80, 25);
 			btn1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//isbn or 제목 미 입력시 오류 메세지 추가, 중복 검
 					String str = isbnField.getText();
 					String isbn = str.replaceAll("[^0-9]", "");
 					String title = titleField.getText();
@@ -398,11 +397,9 @@ public class rotation_panel extends JPanel {
 						return;
 					}
 					
-					book newBook = new book(isbn,
-							titleField.getText(), authorField.getText(),
-							path, genreField.getText());
+					book newBook = new book(isbn, titleField.getText(), authorField.getText(), path, genreField.getText());
 					if(myBook.getID() == null) {
-						if(!book_f.isNew(myBook)) {
+						if(!book_f.isNew(newBook)) {
 							message = "이미 등록된 도서입니다. 다른 도서를 등록하세요.";
 							isbnField.requestFocus();
 							pop.showMessageDialog(((JButton)e.getSource()).getParent(), message);
