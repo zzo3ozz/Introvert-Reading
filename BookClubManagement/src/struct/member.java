@@ -25,7 +25,6 @@ public class member {
 			name = rs.getString(4);
 			level = rs.getInt(5);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -41,10 +40,4 @@ public class member {
 	public String getName() {
 		return this.name;
 	}
-	
-	public void printInfo() {
-		System.out.print(this.num + " " + this.id + " " + this.name + " " + this.level);
-	}
-	
-	
 }

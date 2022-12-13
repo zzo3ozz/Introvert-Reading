@@ -84,7 +84,6 @@ public class team {
 		}
 		result = result.substring(0, result.length() - 5);
 		result += "</p></html>";
-		System.out.println(result);
 		return result;
 	}
 

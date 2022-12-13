@@ -24,7 +24,6 @@ public class rotation_panel extends JPanel {
 	private now_rotation now_rotation_pane;
 	private my_reading my_reading_pane;
 	public rotation_panel() {
-		System.out.println("rotation_pane");
 		setBounds(0, 0, 1000, 650);
 		setLayout(null);
 		setBackground(new Color(0, 0, 0, 0));

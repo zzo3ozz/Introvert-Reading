@@ -33,7 +33,6 @@ public class mypage extends JPanel {
 					for(int i = 0; i < MENU_NUM; i++) {
 						if(btn.equals(btn_list[i])) {
 							selected = i;
-							System.out.println(selected);
 						}
 					}
 					Main.mypage_pane.setVisible(false);
