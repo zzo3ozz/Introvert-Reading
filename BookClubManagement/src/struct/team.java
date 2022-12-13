@@ -70,20 +70,20 @@ public class team {
 	}
 	
 	public String getBookByString() {
-		String result = "<html>";
+		String result = "<html><style> p {font-family: 'Gabia Maeumgyeol'; padding-bottom: 7px;}</style>";
 		
 		for(int i = 0; i < this.books.size(); i++) {
 			if(books.get(i).getID() == null)
 				result += "-";
 			else {
-				result += "「";
+				result += "<p>「";
 				result += books.get(i).getTitle();
 				result += "」";
 			}
-			result += ",<br>";
+			result += ",</p>";
 		}
 		result = result.substring(0, result.length() - 5);
-		result += "</html>";
+		result += "</p></html>";
 		System.out.println(result);
 		return result;
 	}

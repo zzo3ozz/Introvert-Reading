@@ -1,11 +1,14 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 import function.session;
+import UI.*;
 
 public class menu extends JPanel {
 	private int MENU_NUM = 3; 
+	private JButton[] btn_list; 
 	public int selected;
 	
 	public menu() {
@@ -13,18 +16,17 @@ public class menu extends JPanel {
 			MENU_NUM = 4;
 		}
 		
-		setBackground(Color.ORANGE);
+		setBackground(Colors.mid);
 		setBounds(700, 0, 300, 650);
-		setLayout(new FlowLayout());
+		setLayout(null);
 		
-		JButton[] btn_list = new JButton[MENU_NUM];
-		
-		btn_list[0] = new JButton("로테이션 일정");
-		btn_list[1] = new JButton("도서 목록");
-		btn_list[2] = new JButton("마이페이지");
+		btn_list = new JButton[MENU_NUM];
+		btn_list[0] = new MenuButton("로테이션 일정"); btn_list[0].setBounds(25, 235, 250, 40);
+		btn_list[1] = new MenuButton("도서 목록"); btn_list[1].setBounds(25, 280, 250, 40);
+		btn_list[2] = new MenuButton("마이페이지"); btn_list[2].setBounds(25, 325, 250, 40);
 		
 		if(MENU_NUM == 4) {
-			btn_list[3] = new JButton("관리자 메뉴");
+			btn_list[3] = new MenuButton("관리자 메뉴"); btn_list[3].setBounds(25, 370, 250, 40);
 		}
 		
 		for(int i = 0; i < MENU_NUM; i++) {
@@ -37,7 +39,7 @@ public class menu extends JPanel {
 							selected = j;
 					}
 					
-					setVisible(false);
+					Main.menu_pane.setVisible(false);
 					session.stored_page = session.page_name.MENU;
 				}
 			});
