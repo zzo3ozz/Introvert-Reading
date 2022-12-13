@@ -20,13 +20,13 @@ public class login_panel extends JPanel{
 
 		JLabel idLa = new JLabel("ID");
 		idLa.setBounds(30, 260, 35, 20); idLa.setFont(Fonts.setFont(15, 1)); idLa.setForeground(Colors.base);
-		idField = new JTextField("ad");
+		idField = new JTextField();
 		idField.setFont(Fonts.setFont(12)); idField.setBorder(null);
 		idField.setBounds(70, 260, 200, 20);
 		
 		JLabel pwLa = new JLabel("PW");
 		pwLa.setBounds(30, 290, 35, 20); pwLa.setFont(Fonts.setFont(15, 1)); pwLa.setForeground(Colors.base);
-		pwField = new JPasswordField("1234");
+		pwField = new JPasswordField();
 		pwField.setBorder(null);
 		pwField.setBounds(70, 290, 200, 20);
 		
