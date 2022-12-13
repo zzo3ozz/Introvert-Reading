@@ -15,6 +15,31 @@ public class rotation_f {
 	public final static int DB_FALSE = 0;
 	public final static int SUCCESS = 1;
 	
+	public static LocalDate lastDate() {
+		Connection con = DBConnect.makeConnection();
+		PreparedStatement pstmt = null;
+		LocalDate r_date = null;
+		
+		try {		
+			// 마지막 로테이션 회차 및 날짜 불러오기
+			String time_sql = "select r_end from Rotation order by r_num desc limit 1";
+			pstmt = con.prepareStatement(time_sql);
+			ResultSet rs = pstmt.executeQuery();		
+			
+			if(rs.next()) {
+				r_date = rs.getDate(1).toLocalDate();
+			}
+		} catch(SQLException e) {
+			System.out.print("error!");
+			e.printStackTrace();
+		}
+
+		if(pstmt != null) try{ pstmt.close();} catch(SQLException e){};
+        if(con != null) try{ con.close();} catch(SQLException e){};
+        
+        return r_date;
+	}
+	
 	// 오버로딩1 : 날짜 지정 없이 자동 생성
 	public static int setRotation() {
 		Connection con = DBConnect.makeConnection();
@@ -319,7 +344,14 @@ public class rotation_f {
 	// 현재 내가 참여하고 있는 팀 정보 가져오기
 	public static team getNowTeam(int num) {
 		team now_team = null;
-		LocalDate now_date = LocalDate.now();
+		LocalDate now_date = null;
+		
+		if(session.login_member.getNum() == 1)
+			now_date = LocalDate.of(2022, 10, 3);
+		else if(session.login_member.getNum() == 2)
+			now_date = LocalDate.of(2023, 07, 29);
+		else
+			now_date = LocalDate.now();
 		
 		Connection con = DBConnect.makeConnection();
 		PreparedStatement pstmt = null;
@@ -394,7 +426,14 @@ public class rotation_f {
 	// 현재 나의 독서정보 가져오기
 	public static reading getNowReading(int r_num, int m_num) {
 		reading result = null;
-		LocalDate now_date = LocalDate.now();
+		LocalDate now_date = null;
+		
+		if(session.login_member.getNum() == 1)
+			now_date = LocalDate.of(2022, 10, 3);
+		else if(session.login_member.getNum() == 2)
+			now_date = LocalDate.of(2023, 07, 29);
+		else
+			now_date = LocalDate.now();
 		
 		Connection con = DBConnect.makeConnection();
 		PreparedStatement pstmt = null;

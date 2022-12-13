@@ -144,7 +144,14 @@ public class book_f {
 		ArrayList<String> result = new ArrayList<String>();
 		Connection con = DBConnect.makeConnection();
 		PreparedStatement pstmt = null;
-		LocalDate now_date = LocalDate.now(); 
+		LocalDate now_date = null;
+		
+		if(session.login_member.getNum() == 1)
+			now_date = LocalDate.of(2022, 10, 3);
+		else if(session.login_member.getNum() == 2)
+			now_date = LocalDate.of(2023, 07, 29);
+		else
+			now_date = LocalDate.now();
 		
 		try {
 			String sql = "select r_num, isbn, title, author, genre, read_start, read_end, owner_name from allreading "

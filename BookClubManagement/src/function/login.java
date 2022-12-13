@@ -2,6 +2,8 @@ package function;
 
 import struct.member;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class login {
 	public final static int SUCCESS = 1;
@@ -32,6 +34,22 @@ public class login {
 					con.close();
 					
 					session.login_member = mem;
+					session.now_team = rotation_f.getNowTeam(session.login_member.getNum());
+					session.now_reading = rotation_f.getNowReading(session.now_team.get_r(), session.login_member.getNum());
+					if(session.login_member.getLevel() == 0) {
+						LocalDate now_date = null;
+						
+						if(session.login_member.getNum() == 1)
+							now_date = LocalDate.of(2022, 10, 3);
+						else if(session.login_member.getNum() == 2)
+							now_date = LocalDate.of(2023, 07, 29);
+						else
+							now_date = LocalDate.now();
+						
+						if(ChronoUnit.DAYS.between(now_date, rotation_f.lastDate()) < 3)
+							rotation_f.setRotation();
+					}
+						
 					result = SUCCESS;
 				} else {
 					result = PWERROR;
