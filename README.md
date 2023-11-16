@@ -15,6 +15,4 @@ USING : Java, MySQL, DA#
 ![PORTFOLIO_(드래그함) 13](https://user-images.githubusercontent.com/90233522/236574011-584f9734-dbcf-4a79-bc30-a8cf54990b40.png)
 ![PORTFOLIO_(드래그함) 14](https://user-images.githubusercontent.com/90233522/236574033-75e65035-146c-42a4-a661-5db844e6a74e.png)
 ![PORTFOLIO_(드래그함) 15](https://user-images.githubusercontent.com/90233522/236574050-0b682346-33c4-4731-b027-92a619662af7.png)
-![PORTFOLIO_(드래그함) 16](https://user-images.githubusercontent.com/90233522/236574067-1a7f72ce-c12a-4e6d-a94b-9e8f10045d0f.png)
-![PORTFOLIO_(드래그함) 17](https://user-images.githubusercontent.com/90233522/236574083-efdcec70-2cd9-444a-91c6-dad32065638b.png)
 ![PORTFOLIO_(드래그함) 18](https://user-images.githubusercontent.com/90233522/236574092-178db0f7-7bfd-44d3-be8e-d1c8e34ffc81.png)
